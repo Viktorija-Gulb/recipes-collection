@@ -1,5 +1,6 @@
 import { X, Plus, ArrowUpRight } from 'lucide-react';
 import { useState, type FormEvent, type MouseEvent } from 'react';
+import { recipeCategories } from '../../constants/recipeCategories';
 
 type Recipe = {
   id: string;
@@ -14,9 +15,6 @@ type Recipe = {
   favorite: boolean;
   createdAt?: number;
 };
-
-//TODO: duplicates in another component
-const categories = ['All recipes', 'Breakfast', 'Lunch', 'Dinner', 'Dessert', 'Snacks'];
 
 //TODO: duplicate
 type RecipeInput = Omit<Recipe, 'id' | 'createdAt'>;
@@ -110,50 +108,52 @@ export const RecipeForm = ({ initialRecipe, onSave, onClose }: RecipeFormProps) 
       >
         <div className="modal-heading">
           <div>
-            <p className="eyebrow">{initialRecipe ? 'MAKE IT YOURS' : 'A NEW FAVOURITE'}</p>
-            <h2 id="form-title">{initialRecipe ? 'Edit recipe' : 'Add a recipe'}</h2>
+            <p className="eyebrow">{initialRecipe ? 'PRITAIKYKITE SAU' : 'NAUJAS MĖGSTAMAS RECEPTAS'}</p>
+            <h2 id="form-title">{initialRecipe ? 'Redaguoti receptą' : 'Pridėti receptą'}</h2>
           </div>
-          <button className="icon-button" onClick={onClose} aria-label="Close form">
+          <button className="icon-button" onClick={onClose} aria-label="Uždaryti formą">
             <X />
           </button>
         </div>
         <form onSubmit={handleSubmit} className="recipe-form">
           <label>
-            Recipe name
+            Recepto pavadinimas
             <input
               required
               maxLength={100}
               value={form.title}
               onChange={event => updateField('title', event.target.value)}
-              placeholder="e.g. Roasted tomato soup"
+              placeholder="pvz., keptų pomidorų sriuba"
             />
           </label>
           <label>
-            A little about it
+            Trumpai apie receptą
             <textarea
               maxLength={240}
               value={form.description}
               onChange={event => updateField('description', event.target.value)}
-              placeholder="What makes this recipe special?"
+              placeholder="Kuo šis receptas ypatingas?"
               rows={2}
             />
           </label>
           <div className="form-row">
             <label>
-              Category
+              Kategorija
               <select
                 value={form.category}
                 onChange={event => updateField('category', event.target.value)}
               >
-                {categories
-                  .filter(category => category !== 'All recipes')
+                {recipeCategories
+                  .filter(category => category.value !== 'All recipes')
                   .map(category => (
-                    <option key={category}>{category}</option>
+                    <option key={category.value} value={category.value}>
+                      {category.label}
+                    </option>
                   ))}
               </select>
             </label>
             <label>
-              Cooking time (min)
+              Gaminimo trukmė (min.)
               <input
                 type="number"
                 min="1"
@@ -164,7 +164,7 @@ export const RecipeForm = ({ initialRecipe, onSave, onClose }: RecipeFormProps) 
               />
             </label>
             <label>
-              Servings
+              Porcijos
               <input
                 type="number"
                 min="1"
@@ -176,7 +176,7 @@ export const RecipeForm = ({ initialRecipe, onSave, onClose }: RecipeFormProps) 
             </label>
           </div>
           <label>
-            Photo URL
+            Nuotraukos nuoroda
             <input
               type="url"
               value={form.image}
@@ -184,25 +184,25 @@ export const RecipeForm = ({ initialRecipe, onSave, onClose }: RecipeFormProps) 
               placeholder="https://…"
             />
             <span className="field-hint">
-              Paste an image URL. Cloud photo uploads can be added when we connect storage.
+              Įklijuokite nuotraukos nuorodą. Įkėlimo funkciją galėsime pridėti prijungę saugyklą.
             </span>
           </label>
           <fieldset className="list-fieldset">
-            <legend>Ingredients</legend>
+            <legend>Ingredientai</legend>
             {form.ingredients.map((ingredient, index) => (
               <div className="list-input-row" key={`ingredient-${index}`}>
                 <input
-                  aria-label={`Ingredient ${index + 1}`}
+                  aria-label={`Ingredientas ${index + 1}`}
                   value={ingredient}
                   onChange={event => updateListItem('ingredients', index, event.target.value)}
-                  placeholder={`Ingredient ${index + 1}`}
+                  placeholder={`Ingredientas ${index + 1}`}
                 />
                 {form.ingredients.length > 1 && (
                   <button
                     type="button"
                     className="remove-row"
                     onClick={() => removeListItem('ingredients', index)}
-                    aria-label="Remove ingredient"
+                    aria-label="Pašalinti ingredientą"
                   >
                     <X size={16} />
                   </button>
@@ -214,27 +214,27 @@ export const RecipeForm = ({ initialRecipe, onSave, onClose }: RecipeFormProps) 
               className="text-button"
               onClick={() => addListItem('ingredients')}
             >
-              <Plus size={15} /> Add ingredient
+              <Plus size={15} /> Pridėti ingredientą
             </button>
           </fieldset>
           <fieldset className="list-fieldset">
-            <legend>Instructions</legend>
+            <legend>Gaminimo eiga</legend>
             {form.instructions.map((instruction, index) => (
               <div className="list-input-row instruction-input-row" key={`instruction-${index}`}>
                 <span className="step-number">{index + 1}</span>
                 <textarea
-                  aria-label={`Step ${index + 1}`}
+                  aria-label={`Žingsnis ${index + 1}`}
                   rows={2}
                   value={instruction}
                   onChange={event => updateListItem('instructions', index, event.target.value)}
-                  placeholder={`Describe step ${index + 1}`}
+                  placeholder={`Aprašykite ${index + 1} žingsnį`}
                 />
                 {form.instructions.length > 1 && (
                   <button
                     type="button"
                     className="remove-row"
                     onClick={() => removeListItem('instructions', index)}
-                    aria-label="Remove step"
+                    aria-label="Pašalinti žingsnį"
                   >
                     <X size={16} />
                   </button>
@@ -246,15 +246,16 @@ export const RecipeForm = ({ initialRecipe, onSave, onClose }: RecipeFormProps) 
               className="text-button"
               onClick={() => addListItem('instructions')}
             >
-              <Plus size={15} /> Add step
+              <Plus size={15} /> Pridėti žingsnį
             </button>
           </fieldset>
           <div className="form-actions">
             <button type="button" className="button button-quiet" onClick={onClose}>
-              Cancel
+              Atšaukti
             </button>
             <button type="submit" className="button button-primary">
-              {initialRecipe ? 'Save changes' : 'Save recipe'} <ArrowUpRight size={16} />
+              {initialRecipe ? 'Išsaugoti pakeitimus' : 'Išsaugoti receptą'}{' '}
+              <ArrowUpRight size={16} />
             </button>
           </div>
         </form>

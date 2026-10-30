@@ -5,16 +5,16 @@ export const HeroSection = () => {
     <section className="hero-section">
       <div className="hero-copy">
         <p className="eyebrow">
-          <Sparkles size={14} /> YOUR LITTLE CORNER OF THE KITCHEN
+          <Sparkles size={14} /> JŪSŲ MAŽAS VIRTUVĖS KAMPELIS
         </p>
         <h1>
-          Good food.
+          Skanus maistas.
           <br />
-          <em>Good memories.</em>
+          <em>Gražūs prisiminimai.</em>
         </h1>
         <p className="hero-description">
-          A home for the recipes you love, the ones you can't wait to make again, and the new
-          favourites still waiting to happen.
+          Namai receptams, kuriuos mėgstate, kuriuos norite gaminti dar kartą, ir naujiems
+          atradimams, kurie dar tik laukia savo eilės.
         </p>
         <button
           className="button button-dark"
@@ -22,31 +22,31 @@ export const HeroSection = () => {
             document.getElementById('recipe-collection')?.scrollIntoView({ behavior: 'smooth' })
           }
         >
-          Explore the collection <ArrowDownRight size={17} />
+          Peržiūrėti kolekciją <ArrowDownRight size={17} />
         </button>
         <div className="hero-note">
-          <span className="note-line" /> Collected with love, made to be shared.
+          <span className="note-line" /> Su meile surinkta ir dalijimuisi skirta.
         </div>
       </div>
       <div className="hero-visual">
         <img
           src="https://images.unsplash.com/photo-1498837167922-ddd27525d352?auto=format&fit=crop&w=1400&q=90"
-          alt="Fresh seasonal ingredients laid out on a kitchen table"
+          alt="Švieži sezoniniai produktai ant virtuvės stalo"
           fetchPriority="high"
         />
         <div className="hero-stamp">
-          <span>MADE WITH</span>
+          <span>SU</span>
           <Heart size={19} fill="currentColor" />
-          <span>A LITTLE LOVE</span>
+          <span>MEILE</span>
         </div>
         <div className="hero-caption">
-          <span>01 / THE EVERYDAY EDIT</span>
-          <span>Simple things, done beautifully.</span>
+          <span>01 / KASDIENIŠKI SKONIAI</span>
+          <span>Paprasta, bet ypatinga.</span>
         </div>
       </div>
       <div className="hero-bottom-rule">
-        <span>SEASONAL • SIMPLE • ALWAYS DELICIOUS</span>
-        <span>VOL. 01 — YOUR RECIPE JOURNAL</span>
+        <span>SEZONIŠKA • PAPRASTA • VISADA SKANU</span>
+        <span>01 TOMAS — JŪSŲ RECEPTŲ KNYGA</span>
       </div>
     </section>
   );

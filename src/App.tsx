@@ -11,8 +11,7 @@ import { RecipeCard } from './features/RecipeCard/RecipeCard';
 import type { Recipe, RecipeInput, SortOption } from './types';
 import useRecipes from './features/Hooks/useRecipes';
 import { RecipeDetail } from './features/RecipeDetail/RecipeDetail';
-
-const categories = ['All recipes', 'Breakfast', 'Lunch', 'Dinner', 'Dessert', 'Snacks'];
+import { recipeCategories } from './constants/recipeCategories';
 
 function App() {
   const { recipes, setRecipes } = useRecipes();
@@ -67,7 +66,7 @@ function App() {
       );
     } catch (error) {
       console.error('Failed to save favorite:', error);
-      window.alert('Could not save the favorite. Please try again.');
+      window.alert('Nepavyko išsaugoti mėgstamiausio recepto. Bandykite dar kartą.');
     }
   };
 
@@ -134,20 +133,20 @@ function App() {
         <section className="collection-section" id="recipe-collection">
           <div className="section-heading">
             <div>
-              <p className="eyebrow">THE RECIPE JOURNAL</p>
-              <h2>{favoritesOnly ? 'The ones you love' : 'Something delicious awaits.'}</h2>
+              <p className="eyebrow">RECEPTŲ KNYGA</p>
+              <h2>{favoritesOnly ? 'Jūsų mėgstamiausi' : 'Čia laukia gardūs atradimai.'}</h2>
               <p className="section-description">
                 {favoritesOnly
-                  ? 'Your most-loved recipes, all in one place.'
-                  : 'A growing collection of tried, treasured and soon-to-be favourites.'}
+                  ? 'Visi jūsų mėgstamiausi receptai vienoje vietoje.'
+                  : 'Vis gausėjanti išbandytų, brangių ir būsimų mėgstamiausių receptų kolekcija.'}
               </p>
             </div>
             <div className="collection-count">
               <span>{filteredRecipes.length.toString().padStart(2, '0')}</span>
               <small>
-                RECIPES
+                RECEPTAI
                 <br />
-                AND COUNTING
+                IŠ VISO
               </small>
             </div>
           </div>
@@ -158,14 +157,14 @@ function App() {
               <input
                 value={query}
                 onChange={event => setQuery(event.target.value)}
-                placeholder="Find a recipe or ingredient…"
-                aria-label="Search recipes"
+                placeholder="Ieškoti recepto ar ingrediento…"
+                aria-label="Ieškoti receptų"
               />
               {query && (
                 <button
                   className="clear-search"
                   onClick={() => setQuery('')}
-                  aria-label="Clear search"
+                  aria-label="Išvalyti paiešką"
                 >
                   <X size={16} />
                 </button>
@@ -175,36 +174,36 @@ function App() {
               className={`filter-toggle ${mobileFiltersOpen ? 'is-open' : ''}`}
               onClick={() => setMobileFiltersOpen(open => !open)}
             >
-              <SlidersHorizontal size={16} /> Filters
+              <SlidersHorizontal size={16} /> Filtrai
             </button>
             <label className="sort-control">
-              <span>Sort by</span>
+              <span>Rikiuoti</span>
               <select
                 value={sortBy}
                 onChange={event => setSortBy(event.target.value as SortOption)}
-                aria-label="Sort recipes"
+                aria-label="Rikiuoti receptus"
               >
-                <option value="newest">Recently added</option>
-                <option value="quickest">Quickest first</option>
-                <option value="alphabetical">A–Z</option>
+                <option value="newest">Naujausi</option>
+                <option value="quickest">Greičiausi</option>
+                <option value="alphabetical">Pagal abėcėlę</option>
               </select>
             </label>
           </div>
 
           <div
             className={`category-list ${mobileFiltersOpen ? 'show-mobile' : ''}`}
-            aria-label="Filter by category"
+            aria-label="Filtruoti pagal kategoriją"
           >
-            {categories.map(category => (
+            {recipeCategories.map(({ value, label }) => (
               <button
-                key={category}
-                className={`category-button ${activeCategory === category ? 'selected' : ''}`}
+                key={value}
+                className={`category-button ${activeCategory === value ? 'selected' : ''}`}
                 onClick={() => {
-                  setActiveCategory(category);
+                  setActiveCategory(value);
                   setMobileFiltersOpen(false);
                 }}
               >
-                {category}
+                {label}
               </button>
             ))}
           </div>
@@ -225,8 +224,8 @@ function App() {
               <span className="empty-icon">
                 <Bookmark size={23} />
               </span>
-              <h3>Nothing simmering here just yet.</h3>
-              <p>Try another search or add a recipe to start filling your collection.</p>
+              <h3>Kol kas čia dar nieko nėra.</h3>
+              <p>Pabandykite kitą paiešką arba pridėkite receptą į savo kolekciją.</p>
               <button
                 className="button button-primary"
                 onClick={
@@ -240,8 +239,8 @@ function App() {
                 }
               >
                 {query || activeCategory !== 'All recipes' || favoritesOnly
-                  ? 'Clear filters'
-                  : 'Add your first recipe'}
+                  ? 'Išvalyti filtrus'
+                  : 'Pridėti pirmą receptą'}
               </button>
             </div>
           )}

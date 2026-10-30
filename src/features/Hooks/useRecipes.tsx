@@ -26,7 +26,9 @@ const useRecipes = () => {
 
         setRecipes(recipesData);
       } catch (error: unknown) {
-        setError(error instanceof Error ? error.message : 'Failed to fetch recipes.');
+        setError(
+          error instanceof Error ? error.message : 'Nepavyko įkelti receptų.'
+        );
       } finally {
         setLoading(false);
       }

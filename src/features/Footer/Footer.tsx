@@ -9,11 +9,11 @@ export const Footer = () => {
           <Leaf size={17} />
         </span>
         <span className="brand-name">
-          the sunday <em>table</em>
+          sekmadienio <em>stalas</em>
         </span>
       </a>
-      <span>MADE SLOWLY, SHARED GENEROUSLY.</span>
-      <span>© {new Date().getFullYear()} THE SUNDAY TABLE</span>
+      <span>GAMINAME NESKUBĖDAMI, DALINAMĖS DOSNIAI.</span>
+      <span>© {new Date().getFullYear()} SEKMADIENIO STALAS</span>
     </footer>
   );
 };

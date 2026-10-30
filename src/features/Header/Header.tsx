@@ -30,16 +30,16 @@ export const Header = ({
           setFavoritesOnly(false);
           setQuery('');
         }}
-        aria-label="The Sunday Table home"
+        aria-label="Sekmadienio stalo pradinis puslapis"
       >
         <span className="brand-mark">
           <Leaf size={19} />
         </span>
         <span className="brand-name">
-          the sunday <em>table</em>
+          sekmadienio <em>stalas</em>
         </span>
       </a>
-      <nav className="header-nav" aria-label="Main navigation">
+      <nav className="header-nav" aria-label="Pagrindinė navigacija">
         <button
           className={!favoritesOnly ? 'nav-link active' : 'nav-link'}
           onClick={() => {
@@ -47,7 +47,7 @@ export const Header = ({
             setSelectedRecipeId(null);
           }}
         >
-          My collection
+          Mano kolekcija
         </button>
         <button
           className={favoritesOnly ? 'nav-link active' : 'nav-link'}
@@ -56,11 +56,11 @@ export const Header = ({
             setSelectedRecipeId(null);
           }}
         >
-          <Heart size={15} /> Favourites
+          <Heart size={15} /> Mėgstamiausi
         </button>
       </nav>
       <button className="button button-primary header-add" onClick={openAddForm}>
-        <Plus size={17} /> <span>Add recipe</span>
+        <Plus size={17} /> <span>Pridėti receptą</span>
       </button>
     </header>
   );

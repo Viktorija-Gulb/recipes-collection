@@ -1,5 +1,6 @@
 import { X, Heart, Clock3, ChefHat, Leaf } from 'lucide-react';
 import type { FormEvent, MouseEvent } from 'react';
+import { getCategoryLabel } from '../../constants/recipeCategories';
 
 type Recipe = {
   id: string;
@@ -49,20 +50,20 @@ export const RecipeDetail = ({
       >
         <div className="detail-image-wrap">
           <img src={recipe.image || fallbackImage} alt={recipe.title} className="detail-image" />
-          <button className="detail-close icon-button" onClick={onClose} aria-label="Close recipe">
+          <button className="detail-close icon-button" onClick={onClose} aria-label="Uždaryti receptą">
             <X />
           </button>
-          <span className="category-tag detail-tag">{recipe.category}</span>
+          <span className="category-tag detail-tag">{getCategoryLabel(recipe.category)}</span>
         </div>
         <div className="detail-content">
           <div className="detail-topline">
-            <p className="eyebrow">FROM THE RECIPE BOX</p>
+            <p className="eyebrow">IŠ JŪSŲ RECEPTŲ KNYGOS</p>
             <button
               className={`detail-favorite ${recipe.favorite ? 'is-favorite' : ''}`}
               onClick={() => onToggleFavorite(recipe.id)}
             >
               <Heart size={17} fill={recipe.favorite ? 'currentColor' : 'none'} />{' '}
-              {recipe.favorite ? 'Saved' : 'Save'}
+              {recipe.favorite ? 'Išsaugota' : 'Išsaugoti'}
             </button>
           </div>
           <h2 id="detail-title" className="detail-title">
@@ -72,24 +73,24 @@ export const RecipeDetail = ({
           <div className="detail-stats">
             <span>
               <Clock3 size={17} />
-              <strong>{recipe.time} min</strong>
-              <small>total time</small>
+              <strong>{recipe.time} min.</strong>
+              <small>gaminimo trukmė</small>
             </span>
             <span>
               <ChefHat size={17} />
               <strong>{recipe.servings}</strong>
-              <small>servings</small>
+              <small>porcijos</small>
             </span>
             <span>
               <Leaf size={17} />
-              <strong>{recipe.category}</strong>
-              <small>category</small>
+              <strong>{getCategoryLabel(recipe.category)}</strong>
+              <small>kategorija</small>
             </span>
           </div>
           <div className="detail-columns">
             <section>
-              <p className="eyebrow">WHAT YOU'LL NEED</p>
-              <h3>Ingredients</h3>
+              <p className="eyebrow">KO PRIREIKS</p>
+              <h3>Ingredientai</h3>
               {recipe.ingredients?.length ? (
                 <ul className="ingredient-list">
                   {recipe.ingredients.map((ingredient, index) => (
@@ -97,12 +98,12 @@ export const RecipeDetail = ({
                   ))}
                 </ul>
               ) : (
-                <p className="muted-copy">No ingredients added yet.</p>
+                <p className="muted-copy">Ingredientų dar nėra.</p>
               )}
             </section>
             <section>
-              <p className="eyebrow">LET'S GET COOKING</p>
-              <h3>Method</h3>
+              <p className="eyebrow">GAMINIMO EIGA</p>
+              <h3>Paruošimas</h3>
               {recipe.instructions?.length ? (
                 <ol className="instruction-list">
                   {recipe.instructions.map((instruction, index) => (
@@ -113,16 +114,16 @@ export const RecipeDetail = ({
                   ))}
                 </ol>
               ) : (
-                <p className="muted-copy">No instructions added yet.</p>
+                <p className="muted-copy">Gaminimo žingsnių dar nėra.</p>
               )}
             </section>
           </div>
           <div className="detail-actions">
             <button className="button button-quiet" onClick={onEdit}>
-              Edit recipe
+              Redaguoti receptą
             </button>
             <button className="button button-danger" onClick={onDelete}>
-              Delete
+              Ištrinti
             </button>
           </div>
         </div>
