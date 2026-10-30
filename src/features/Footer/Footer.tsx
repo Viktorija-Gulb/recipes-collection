@@ -1,13 +1,10 @@
-import { Leaf } from 'lucide-react'
+import { Leaf } from 'lucide-react';
+import './Footer.css';
 
 export const Footer = () => {
   return (
     <footer className="site-footer">
-      <a
-        className="brand footer-brand"
-        href="#"
-        onClick={(event) => event.preventDefault()}
-      >
+      <a className="brand footer-brand" href="#" onClick={event => event.preventDefault()}>
         <span className="brand-mark">
           <Leaf size={17} />
         </span>
@@ -18,5 +15,5 @@ export const Footer = () => {
       <span>MADE SLOWLY, SHARED GENEROUSLY.</span>
       <span>© {new Date().getFullYear()} THE SUNDAY TABLE</span>
     </footer>
-  )
-}
+  );
+};

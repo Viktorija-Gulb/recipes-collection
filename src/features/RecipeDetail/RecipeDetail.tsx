@@ -1,30 +1,30 @@
-import { X, Heart, Clock3, ChefHat, Leaf } from 'lucide-react'
-import type { FormEvent, MouseEvent } from 'react'
+import { X, Heart, Clock3, ChefHat, Leaf } from 'lucide-react';
+import type { FormEvent, MouseEvent } from 'react';
 
 type Recipe = {
-  id: string
-  title: string
-  description: string
-  category: string
-  time: number
-  servings: number
-  image: string
-  ingredients: string[]
-  instructions: string[]
-  favorite: boolean
-  createdAt?: number
-}
+  id: string;
+  title: string;
+  description: string;
+  category: string;
+  time: number;
+  servings: number;
+  image: string;
+  ingredients: string[];
+  instructions: string[];
+  favorite: boolean;
+  createdAt?: number;
+};
 
 type RecipeDetailProps = {
-  recipe: Recipe
-  onClose: () => void
-  onEdit: () => void
-  onToggleFavorite: (recipeId: string) => void
-  onDelete: () => void
-}
+  recipe: Recipe;
+  onClose: () => void;
+  onEdit: () => void;
+  onToggleFavorite: (recipeId: string) => void;
+  onDelete: () => void;
+};
 
 const fallbackImage =
-  'https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&w=1200&q=85'
+  'https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&w=1200&q=85';
 
 export const RecipeDetail = ({
   recipe,
@@ -38,7 +38,7 @@ export const RecipeDetail = ({
       className="overlay detail-overlay"
       role="presentation"
       onMouseDown={(event: MouseEvent<HTMLDivElement>) => {
-        if (event.target === event.currentTarget) onClose()
+        if (event.target === event.currentTarget) onClose();
       }}
     >
       <article
@@ -48,16 +48,8 @@ export const RecipeDetail = ({
         aria-labelledby="detail-title"
       >
         <div className="detail-image-wrap">
-          <img
-            src={recipe.image || fallbackImage}
-            alt={recipe.title}
-            className="detail-image"
-          />
-          <button
-            className="detail-close icon-button"
-            onClick={onClose}
-            aria-label="Close recipe"
-          >
+          <img src={recipe.image || fallbackImage} alt={recipe.title} className="detail-image" />
+          <button className="detail-close icon-button" onClick={onClose} aria-label="Close recipe">
             <X />
           </button>
           <span className="category-tag detail-tag">{recipe.category}</span>
@@ -69,19 +61,14 @@ export const RecipeDetail = ({
               className={`detail-favorite ${recipe.favorite ? 'is-favorite' : ''}`}
               onClick={() => onToggleFavorite(recipe.id)}
             >
-              <Heart
-                size={17}
-                fill={recipe.favorite ? 'currentColor' : 'none'}
-              />{' '}
+              <Heart size={17} fill={recipe.favorite ? 'currentColor' : 'none'} />{' '}
               {recipe.favorite ? 'Saved' : 'Save'}
             </button>
           </div>
           <h2 id="detail-title" className="detail-title">
             {recipe.title}
           </h2>
-          {recipe.description && (
-            <p className="detail-description">{recipe.description}</p>
-          )}
+          {recipe.description && <p className="detail-description">{recipe.description}</p>}
           <div className="detail-stats">
             <span>
               <Clock3 size={17} />
@@ -141,5 +128,5 @@ export const RecipeDetail = ({
         </div>
       </article>
     </div>
-  )
-}
+  );
+};

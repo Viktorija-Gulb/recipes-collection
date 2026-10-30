@@ -1,12 +1,13 @@
-import { Heart, Leaf, Plus } from 'lucide-react'
+import { Heart, Leaf, Plus } from 'lucide-react';
+import './Header.css';
 
 interface HeaderProps {
-  openAddForm: () => void
-  setSelectedRecipeId: (value: null | string) => void
-  setActiveCategory: (value: string) => void
-  setFavoritesOnly: (value: boolean) => void
-  setQuery: (value: string) => void
-  favoritesOnly: boolean
+  openAddForm: () => void;
+  setSelectedRecipeId: (value: null | string) => void;
+  setActiveCategory: (value: string) => void;
+  setFavoritesOnly: (value: boolean) => void;
+  setQuery: (value: string) => void;
+  favoritesOnly: boolean;
 }
 
 export const Header = ({
@@ -22,12 +23,12 @@ export const Header = ({
       <a
         className="brand"
         href="#"
-        onClick={(event) => {
-          event.preventDefault()
-          setSelectedRecipeId(null)
-          setActiveCategory('All recipes')
-          setFavoritesOnly(false)
-          setQuery('')
+        onClick={event => {
+          event.preventDefault();
+          setSelectedRecipeId(null);
+          setActiveCategory('All recipes');
+          setFavoritesOnly(false);
+          setQuery('');
         }}
         aria-label="The Sunday Table home"
       >
@@ -42,8 +43,8 @@ export const Header = ({
         <button
           className={!favoritesOnly ? 'nav-link active' : 'nav-link'}
           onClick={() => {
-            setFavoritesOnly(false)
-            setSelectedRecipeId(null)
+            setFavoritesOnly(false);
+            setSelectedRecipeId(null);
           }}
         >
           My collection
@@ -51,19 +52,16 @@ export const Header = ({
         <button
           className={favoritesOnly ? 'nav-link active' : 'nav-link'}
           onClick={() => {
-            setFavoritesOnly(true)
-            setSelectedRecipeId(null)
+            setFavoritesOnly(true);
+            setSelectedRecipeId(null);
           }}
         >
           <Heart size={15} /> Favourites
         </button>
       </nav>
-      <button
-        className="button button-primary header-add"
-        onClick={openAddForm}
-      >
+      <button className="button button-primary header-add" onClick={openAddForm}>
         <Plus size={17} /> <span>Add recipe</span>
       </button>
     </header>
-  )
-}
+  );
+};

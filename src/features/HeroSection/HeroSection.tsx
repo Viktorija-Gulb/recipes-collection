@@ -1,4 +1,4 @@
-import { ArrowDownRight, Heart, Sparkles } from 'lucide-react'
+import { ArrowDownRight, Heart, Sparkles } from 'lucide-react';
 
 export const HeroSection = () => {
   return (
@@ -13,15 +13,13 @@ export const HeroSection = () => {
           <em>Good memories.</em>
         </h1>
         <p className="hero-description">
-          A home for the recipes you love, the ones you can't wait to make
-          again, and the new favourites still waiting to happen.
+          A home for the recipes you love, the ones you can't wait to make again, and the new
+          favourites still waiting to happen.
         </p>
         <button
           className="button button-dark"
           onClick={() =>
-            document
-              .getElementById('recipe-collection')
-              ?.scrollIntoView({ behavior: 'smooth' })
+            document.getElementById('recipe-collection')?.scrollIntoView({ behavior: 'smooth' })
           }
         >
           Explore the collection <ArrowDownRight size={17} />
@@ -51,5 +49,5 @@ export const HeroSection = () => {
         <span>VOL. 01 — YOUR RECIPE JOURNAL</span>
       </div>
     </section>
-  )
-}
+  );
+};
