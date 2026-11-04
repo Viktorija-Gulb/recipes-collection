@@ -10,6 +10,7 @@ type RecipeDetailProps = {
   onEdit: () => void;
   onToggleFavorite: (recipeId: string) => void;
   onDelete: () => void;
+  isAdmin: boolean;
 };
 
 const fallbackImage =
@@ -21,6 +22,7 @@ export const RecipeDetail = ({
   onEdit,
   onToggleFavorite,
   onDelete,
+  isAdmin,
 }: RecipeDetailProps) => {
   return (
     <div
@@ -115,12 +117,16 @@ export const RecipeDetail = ({
             </section>
           </div>
           <div className="detail-actions">
-            <button className="button button-quiet" onClick={onEdit}>
-              Redaguoti receptą
-            </button>
-            <button className="button button-danger" onClick={onDelete}>
-              Ištrinti
-            </button>
+            {isAdmin && (
+              <button className="button button-quiet" onClick={onEdit}>
+                Redaguoti receptą
+              </button>
+            )}
+            {isAdmin && (
+              <button className="button button-danger" onClick={onDelete}>
+                Ištrinti
+              </button>
+            )}
           </div>
         </div>
       </article>

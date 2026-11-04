@@ -20,6 +20,7 @@ interface Props {
   toggleFavorite: (recipeId: string) => void;
   openAddForm: () => void;
   setSelectedRecipeId: (recipeId: string | null) => void;
+  isAdmin: boolean;
 }
 
 export const RecipesCollection: React.FC<Props> = ({
@@ -37,6 +38,7 @@ export const RecipesCollection: React.FC<Props> = ({
   toggleFavorite,
   openAddForm,
   setSelectedRecipeId,
+  isAdmin,
 }) => {
   return (
     <section className="collection-section" id="recipe-collection">
@@ -127,19 +129,21 @@ export const RecipesCollection: React.FC<Props> = ({
               onToggleFavorite={toggleFavorite}
             />
           ))}
-          <button className="add-card" onClick={openAddForm}>
-            <span className="add-card-icon">
-              <Plus size={24} />
-            </span>
-            <span className="add-card-title">
-              Dar vienas gardus
-              <br />
-              <em>atradimas.</em>
-            </span>
-            <span className="add-card-bottom">
-              PRIDĖKITE SAVO RECEPTĄ <ArrowUpRight size={16} />
-            </span>
-          </button>
+          {isAdmin && (
+            <button className="add-card" onClick={openAddForm}>
+              <span className="add-card-icon">
+                <Plus size={24} />
+              </span>
+              <span className="add-card-title">
+                Dar vienas gardus
+                <br />
+                <em>atradimas.</em>
+              </span>
+              <span className="add-card-bottom">
+                PRIDĖKITE SAVO RECEPTĄ <ArrowUpRight size={16} />
+              </span>
+            </button>
+          )}
         </div>
       ) : (
         <div className="empty-state">

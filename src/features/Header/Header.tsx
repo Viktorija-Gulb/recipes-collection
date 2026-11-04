@@ -87,9 +87,12 @@ export const Header = ({
                 Admin prisijungimas
               </button>
             ))}
-          <button className="button button-primary header-add" onClick={openAddForm}>
-            <Plus size={17} /> <span>Pridėti receptą</span>
-          </button>
+
+          {isAdmin && (
+            <button className="button button-primary header-add" onClick={openAddForm}>
+              <Plus size={17} /> <span>Pridėti receptą</span>
+            </button>
+          )}
         </div>
       </header>
       {loginOpen && <LoginForm onClose={() => setLoginOpen(false)} />}

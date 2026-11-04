@@ -47,6 +47,10 @@ function App() {
   } = useRecipeActions(recipes, setRecipes);
 
   const saveRecipe = async (formData: RecipeInput) => {
+    if (!admin) {
+      throw new Error('Only an admin can add or edit recipes.');
+    }
+
     const recipeId = await saveRecipeAction(formData, editingRecipe?.id);
 
     setSelectedRecipeId(recipeId);
@@ -61,20 +65,22 @@ function App() {
   });
 
   const openAddForm = () => {
+    if (!admin) return;
+
     setSelectedRecipeId(null);
     setEditingRecipe(null);
     setFormOpen(true);
   };
 
   const openEditForm = () => {
-    if (!selectedRecipe) return;
+    if (!admin || !selectedRecipe) return;
     setEditingRecipe(selectedRecipe);
     setSelectedRecipeId(null);
     setFormOpen(true);
   };
 
   const deleteSelectedRecipe = async () => {
-    if (!selectedRecipe) return;
+    if (!admin || !selectedRecipe) return;
 
     try {
       await deleteRecipeAction(selectedRecipe.id);
@@ -115,6 +121,7 @@ function App() {
           toggleFavorite={toggleFavorite}
           openAddForm={openAddForm}
           setSelectedRecipeId={setSelectedRecipeId}
+          isAdmin={admin}
         />
 
         <section className="quote-section">
@@ -147,6 +154,7 @@ function App() {
           onEdit={openEditForm}
           onToggleFavorite={toggleFavorite}
           onDelete={deleteSelectedRecipe}
+          isAdmin={admin}
         />
       )}
     </div>
