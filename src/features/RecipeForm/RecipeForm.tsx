@@ -1,10 +1,16 @@
+import {
+  useEffect,
+  useState,
+  type SubmitEvent,
+  type MouseEvent,
+  type ChangeEvent,
+} from 'react';
 import { X, Plus, ArrowUpRight } from 'lucide-react';
-import { useEffect, useState, type FormEvent, type MouseEvent, type ChangeEvent } from 'react';
-
-import type { Recipe, RecipeInput } from '../../types';
-import './RecipeForm.css';
-import { uploadRecipeImage } from '../../services/RecipeImageService';
 import { recipeCategories } from '../../constants/recipeCategories';
+import { uploadRecipeImage } from '../../services/uploadImageService';
+import type { Recipe, RecipeInput } from '../../types';
+
+import './RecipeForm.css';
 
 type RecipeFormProps = {
   initialRecipe: Recipe | null;
@@ -105,7 +111,7 @@ export const RecipeForm = ({ initialRecipe, onSave, onClose }: RecipeFormProps) 
       [field]: current[field].filter((_, itemIndex) => itemIndex !== index),
     }));
 
-  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     setIsSaving(true);

@@ -1,17 +1,15 @@
-import { useMemo, useState } from 'react';
-import './App.css';
+import { useState } from 'react';
 import { Footer } from './features/Footer/Footer';
 import { Header } from './features/Header/Header';
 import { HeroSection } from './features/HeroSection/HeroSection';
 import { RecipeForm } from './features/RecipeForm/RecipeForm';
-import type { Recipe, RecipeInput, SortOption } from './types';
-import useRecipes from './features/Hooks/useRecipes';
 import { RecipeDetail } from './features/RecipeDetail/RecipeDetail';
-import {
-  saveRecipe as persistRecipe,
-  deleteRecipe as removeRecipe,
-} from './services/recipeService';
 import { RecipesCollection } from './features/RecipesCollection/RecipesCollection';
+import type { Recipe, RecipeInput, SortOption } from './types';
+import useFilteredRecipes from './features/Hooks/useFilteredRecipes';
+import useRecipeActions from './features/Hooks/useRecipeActions';
+import useRecipes from './features/Hooks/useRecipes';
+import './App.css';
 
 function App() {
   const { recipes, setRecipes } = useRecipes();
@@ -26,61 +24,25 @@ function App() {
 
   const selectedRecipe = recipes.find(recipe => recipe.id === selectedRecipeId) || null;
 
+  const {
+    toggleFavorite,
+    saveRecipe: saveRecipeAction,
+    deleteRecipe: deleteRecipeAction,
+  } = useRecipeActions(recipes, setRecipes);
+
   const saveRecipe = async (formData: RecipeInput) => {
-    if (editingRecipe) {
-      await persistRecipe(formData, editingRecipe.id);
-      setRecipes(current =>
-        current.map(recipe =>
-          recipe.id === editingRecipe.id ? { ...recipe, ...formData } : recipe
-        )
-      );
-      setSelectedRecipeId(editingRecipe.id);
-    } else {
-      const savedRecipe = await persistRecipe(formData);
-      setRecipes(current => [{ ...formData, id: savedRecipe.id }, ...current]);
-      setSelectedRecipeId(savedRecipe.id);
-    }
+    const recipeId = await saveRecipeAction(formData, editingRecipe?.id);
+
+    setSelectedRecipeId(recipeId);
     setFormOpen(false);
     setEditingRecipe(null);
   };
-
-  const toggleFavorite = async (recipeId: string) => {
-    const recipe = recipes.find(item => item.id === recipeId);
-    if (!recipe) return;
-
-    const favorite = !recipe.favorite;
-
-    try {
-      await persistRecipe({ ...recipe, favorite }, recipeId);
-      setRecipes(current =>
-        current.map(item => (item.id === recipeId ? { ...item, favorite } : item))
-      );
-    } catch (error) {
-      console.error('Failed to save favorite:', error);
-      window.alert('Nepavyko išsaugoti mėgstamiausio recepto. Bandykite dar kartą.');
-    }
-  };
-
-  const filteredRecipes = useMemo(() => {
-    const normalizedQuery = query.trim().toLowerCase();
-    const result = recipes.filter(recipe => {
-      const matchesQuery =
-        !normalizedQuery ||
-        [recipe.title, recipe.description, recipe.category, ...(recipe.ingredients || [])]
-          .join(' ')
-          .toLowerCase()
-          .includes(normalizedQuery);
-      const matchesCategory =
-        activeCategory === 'All recipes' || recipe.category === activeCategory;
-      const matchesFavorite = !favoritesOnly || recipe.favorite;
-      return matchesQuery && matchesCategory && matchesFavorite;
-    });
-    return [...result].sort((a, b) => {
-      if (sortBy === 'quickest') return a.cooking_time - b.cooking_time;
-      if (sortBy === 'alphabetical') return a.title.localeCompare(b.title);
-      return (b.created_at || 0) - (a.created_at || 0);
-    });
-  }, [recipes, query, activeCategory, favoritesOnly, sortBy]);
+  const filteredRecipes = useFilteredRecipes(recipes, {
+    query,
+    activeCategory,
+    favoritesOnly,
+    sortBy,
+  });
 
   const openAddForm = () => {
     setSelectedRecipeId(null);
@@ -99,11 +61,9 @@ function App() {
     if (!selectedRecipe) return;
 
     try {
-      await removeRecipe(selectedRecipe.id);
-      setRecipes(current => current.filter(recipe => recipe.id !== selectedRecipe.id));
+      await deleteRecipeAction(selectedRecipe.id);
       setSelectedRecipeId(null);
     } catch (error) {
-      // TODO: error handling
       console.error('Failed to delete recipe:', error);
       window.alert('Nepavyko ištrinti recepto. Bandykite dar kartą.');
     }

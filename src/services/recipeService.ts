@@ -56,3 +56,9 @@ export const deleteRecipe = async (recipeId: string) => {
 
   if (error) throw error;
 };
+
+export const setRecipeFavorite = async (recipeId: string, favorite: boolean): Promise<void> => {
+  const { error } = await supabase.from('recipes').update({ favorite }).eq('id', recipeId);
+
+  if (error) throw error;
+};
