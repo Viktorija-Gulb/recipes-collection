@@ -4,14 +4,16 @@ import { Footer } from './features/Footer/Footer';
 import { Header } from './features/Header/Header';
 import { HeroSection } from './features/HeroSection/HeroSection';
 import { RecipeForm } from './features/RecipeForm/RecipeForm';
-import { addDoc, collection, deleteDoc, doc, updateDoc } from 'firebase/firestore';
-import { db } from './config/firebase';
-import { Bookmark, Search, SlidersHorizontal } from 'lucide-react';
+import { Bookmark, Search, SlidersHorizontal, X } from 'lucide-react';
 import { RecipeCard } from './features/RecipeCard/RecipeCard';
 import type { Recipe, RecipeInput, SortOption } from './types';
 import useRecipes from './features/Hooks/useRecipes';
 import { RecipeDetail } from './features/RecipeDetail/RecipeDetail';
 import { recipeCategories } from './constants/recipeCategories';
+import {
+  saveRecipe as persistRecipe,
+  deleteRecipe as removeRecipe,
+} from './services/recipeService';
 
 function App() {
   const { recipes, setRecipes } = useRecipes();
@@ -26,12 +28,9 @@ function App() {
 
   const selectedRecipe = recipes.find(recipe => recipe.id === selectedRecipeId) || null;
 
-  //TODO: dublicates in useRecipes
-  const recipesRef = collection(db, 'all_recipes');
-
   const saveRecipe = async (formData: RecipeInput) => {
     if (editingRecipe) {
-      await updateDoc(doc(db, 'all_recipes', editingRecipe.id), formData);
+      await persistRecipe(formData, editingRecipe.id);
       setRecipes(current =>
         current.map(recipe =>
           recipe.id === editingRecipe.id ? { ...recipe, ...formData } : recipe
@@ -39,15 +38,9 @@ function App() {
       );
       setSelectedRecipeId(editingRecipe.id);
     } else {
-      const newRecipe = {
-        ...formData,
-        id: crypto.randomUUID(),
-        createdAt: Date.now(),
-      };
-      setRecipes(current => [newRecipe, ...current]);
-      setSelectedRecipeId(newRecipe.id);
-
-      await addDoc(recipesRef, newRecipe);
+      const savedRecipe = await persistRecipe(formData);
+      setRecipes(current => [{ ...formData, id: savedRecipe.id }, ...current]);
+      setSelectedRecipeId(savedRecipe.id);
     }
     setFormOpen(false);
     setEditingRecipe(null);
@@ -60,7 +53,6 @@ function App() {
     const favorite = !recipe.favorite;
 
     try {
-      await updateDoc(doc(db, 'all_recipes', recipeId), { favorite });
       setRecipes(current =>
         current.map(item => (item.id === recipeId ? { ...item, favorite } : item))
       );
@@ -84,11 +76,10 @@ function App() {
       const matchesFavorite = !favoritesOnly || recipe.favorite;
       return matchesQuery && matchesCategory && matchesFavorite;
     });
-
     return [...result].sort((a, b) => {
-      if (sortBy === 'quickest') return a.time - b.time;
+      if (sortBy === 'quickest') return a.cooking_time - b.cooking_time;
       if (sortBy === 'alphabetical') return a.title.localeCompare(b.title);
-      return (b.createdAt || 0) - (a.createdAt || 0);
+      return (b.created_at || 0) - (a.created_at || 0);
     });
   }, [recipes, query, activeCategory, favoritesOnly, sortBy]);
 
@@ -109,12 +100,13 @@ function App() {
     if (!selectedRecipe) return;
 
     try {
-      const recipeRef = doc(db, 'all_recipes', selectedRecipe.id);
-      setRecipes(prev => prev.filter(task => task.id != selectedRecipe.id));
-      await deleteDoc(recipeRef);
-    } catch (err) {
+      await removeRecipe(selectedRecipe.id);
+      setRecipes(current => current.filter(recipe => recipe.id !== selectedRecipe.id));
+      setSelectedRecipeId(null);
+    } catch (error) {
       // TODO: error handling
-      console.log('error', err);
+      console.error('Failed to delete recipe:', error);
+      window.alert('Nepavyko ištrinti recepto. Bandykite dar kartą.');
     }
   };
 
@@ -208,7 +200,7 @@ function App() {
             ))}
           </div>
 
-          {filteredRecipes.length > 0 ? (
+          {filteredRecipes?.length > 0 ? (
             <div className="recipe-grid">
               {filteredRecipes.map(recipe => (
                 <RecipeCard

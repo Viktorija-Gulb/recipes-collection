@@ -3,15 +3,15 @@ export interface Recipe {
   title: string;
   description: string;
   category: string;
-  time: number;
+  cooking_time: number;
   servings: number;
-  image: string;
+  image_url: string;
   ingredients: string[];
   instructions: string[];
   favorite: boolean;
-  createdAt?: number;
+  created_at?: number;
 }
 
-export type RecipeInput = Omit<Recipe, 'id' | 'createdAt'>;
+export type RecipeInput = Omit<Recipe, 'id' | 'created_at'>;
 
 export type SortOption = 'newest' | 'quickest' | 'alphabetical';

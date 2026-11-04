@@ -1,20 +1,7 @@
 import { Heart, Clock3, ArrowUpRight } from 'lucide-react';
 import { getCategoryLabel } from '../../constants/recipeCategories';
-
-//TODO: duplicates
-type Recipe = {
-  id: string;
-  title: string;
-  description: string;
-  category: string;
-  time: number;
-  servings: number;
-  image: string;
-  ingredients: string[];
-  instructions: string[];
-  favorite: boolean;
-  createdAt?: number;
-};
+import type { Recipe } from '../../types';
+import './RecipeCard.css';
 
 type RecipeCardProps = {
   recipe: Recipe;
@@ -36,7 +23,7 @@ export const RecipeCard = ({ recipe, onOpen, onToggleFavorite }: RecipeCardProps
       >
         <img
           className="recipe-image"
-          src={recipe.image || fallbackImage}
+          src={recipe.image_url || fallbackImage}
           alt={recipe.title}
           loading="lazy"
         />
@@ -52,7 +39,7 @@ export const RecipeCard = ({ recipe, onOpen, onToggleFavorite }: RecipeCardProps
       </button>
       <button className="recipe-card-copy" onClick={() => onOpen(recipe)}>
         <span className="card-meta">
-          <Clock3 size={14} /> {recipe.time} min. <span className="meta-dot">·</span>{' '}
+          <Clock3 size={14} /> {recipe.cooking_time} min. <span className="meta-dot">·</span>{' '}
           {getCategoryLabel(recipe.category)}
         </span>
         <span className="card-title">{recipe.title}</span>

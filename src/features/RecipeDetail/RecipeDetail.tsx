@@ -1,20 +1,8 @@
 import { X, Heart, Clock3, ChefHat, Leaf } from 'lucide-react';
-import type { FormEvent, MouseEvent } from 'react';
+import type { MouseEvent } from 'react';
 import { getCategoryLabel } from '../../constants/recipeCategories';
-
-type Recipe = {
-  id: string;
-  title: string;
-  description: string;
-  category: string;
-  time: number;
-  servings: number;
-  image: string;
-  ingredients: string[];
-  instructions: string[];
-  favorite: boolean;
-  createdAt?: number;
-};
+import './RecipeDetail.css';
+import type { Recipe } from '../../types';
 
 type RecipeDetailProps = {
   recipe: Recipe;
@@ -49,8 +37,16 @@ export const RecipeDetail = ({
         aria-labelledby="detail-title"
       >
         <div className="detail-image-wrap">
-          <img src={recipe.image || fallbackImage} alt={recipe.title} className="detail-image" />
-          <button className="detail-close icon-button" onClick={onClose} aria-label="Uždaryti receptą">
+          <img
+            src={recipe.image_url || fallbackImage}
+            alt={recipe.title}
+            className="detail-image"
+          />
+          <button
+            className="detail-close icon-button"
+            onClick={onClose}
+            aria-label="Uždaryti receptą"
+          >
             <X />
           </button>
           <span className="category-tag detail-tag">{getCategoryLabel(recipe.category)}</span>
@@ -73,7 +69,7 @@ export const RecipeDetail = ({
           <div className="detail-stats">
             <span>
               <Clock3 size={17} />
-              <strong>{recipe.time} min.</strong>
+              <strong>{recipe.cooking_time} min.</strong>
               <small>gaminimo trukmė</small>
             </span>
             <span>

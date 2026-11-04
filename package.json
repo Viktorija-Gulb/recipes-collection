@@ -14,7 +14,7 @@
     "lint:css:fix": "stylelint \"src/**/*.css\" --fix"
   },
   "dependencies": {
-    "firebase": "^13.1.0",
+    "@supabase/supabase-js": "^2.118.0",
     "lucide-react": "^1.63.0",
     "react": "^19.3.1",
     "react-dom": "^19.3.1"

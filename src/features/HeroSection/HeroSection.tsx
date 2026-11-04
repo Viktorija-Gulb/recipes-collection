@@ -1,4 +1,5 @@
 import { ArrowDownRight, Heart, Sparkles } from 'lucide-react';
+import './HeroSection.css';
 
 export const HeroSection = () => {
   return (

@@ -1,32 +1,19 @@
 import { X, Plus, ArrowUpRight } from 'lucide-react';
-import { useState, type FormEvent, type MouseEvent } from 'react';
+import { useEffect, useState, type FormEvent, type MouseEvent, type ChangeEvent } from 'react';
+
+import type { Recipe, RecipeInput } from '../../types';
+import './RecipeForm.css';
+import { uploadRecipeImage } from '../../services/RecipeImageService';
 import { recipeCategories } from '../../constants/recipeCategories';
-
-type Recipe = {
-  id: string;
-  title: string;
-  description: string;
-  category: string;
-  time: number;
-  servings: number;
-  image: string;
-  ingredients: string[];
-  instructions: string[];
-  favorite: boolean;
-  createdAt?: number;
-};
-
-//TODO: duplicate
-type RecipeInput = Omit<Recipe, 'id' | 'createdAt'>;
 
 type RecipeFormProps = {
   initialRecipe: Recipe | null;
-  onSave: (recipe: RecipeInput) => void;
+  onSave: (recipe: RecipeInput) => Promise<void>;
   onClose: () => void;
 };
 
-type RecipeFormState = Omit<Recipe, 'id' | 'createdAt'> & {
-  time: number | string;
+type RecipeFormState = Omit<Recipe, 'id' | 'created_at'> & {
+  cooking_time: number | string;
   servings: number | string;
 };
 
@@ -44,17 +31,54 @@ export const RecipeForm = ({ initialRecipe, onSave, onClose }: RecipeFormProps) 
           title: '',
           description: '',
           category: 'Dinner',
-          time: 30,
+          cooking_time: 30,
           servings: 2,
-          image: '',
+          image_url: '',
           ingredients: [''],
           instructions: [''],
           favorite: false,
         }
   );
 
+  const [selectedImage, setSelectedImage] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState(form.image_url || fallbackImage);
+  const [uploadError, setUploadError] = useState('');
+  const [isSaving, setIsSaving] = useState(false);
+
+  useEffect(() => {
+    return () => {
+      if (imagePreview.startsWith('blob:')) {
+        URL.revokeObjectURL(imagePreview);
+      }
+    };
+  }, [imagePreview]);
+
+  const handleImageChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+
+    if (!file) return;
+
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
+
+    if (!allowedTypes.includes(file.type)) {
+      setUploadError('Pasirinkite JPG, PNG arba WebP nuotrauką.');
+      event.target.value = '';
+      return;
+    }
+
+    if (file.size > 5 * 1024 * 1024) {
+      setUploadError('Nuotrauka negali būti didesnė nei 5 MB.');
+      event.target.value = '';
+      return;
+    }
+
+    setSelectedImage(file);
+    setImagePreview(URL.createObjectURL(file));
+    setUploadError('');
+  };
+
   const updateField = (
-    field: 'title' | 'description' | 'category' | 'time' | 'servings' | 'image',
+    field: 'title' | 'description' | 'category' | 'cooking_time' | 'servings' | 'image_url',
     value: string
   ) =>
     setForm(
@@ -64,32 +88,58 @@ export const RecipeForm = ({ initialRecipe, onSave, onClose }: RecipeFormProps) 
           [field]: value,
         }) as RecipeFormState
     );
+
   const updateListItem = (field: RecipeListField, index: number, value: string) => {
     setForm(current => ({
       ...current,
       [field]: current[field].map((item, itemIndex) => (itemIndex === index ? value : item)),
     }));
   };
+
   const addListItem = (field: RecipeListField) =>
     setForm(current => ({ ...current, [field]: [...current[field], ''] }));
+
   const removeListItem = (field: RecipeListField, index: number) =>
     setForm(current => ({
       ...current,
       [field]: current[field].filter((_, itemIndex) => itemIndex !== index),
     }));
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    onSave({
-      ...form,
-      title: form.title.trim(),
-      description: form.description.trim(),
-      time: Math.max(1, Number(form.time) || 1),
-      servings: Math.max(1, Number(form.servings) || 1),
-      image: form.image.trim() || fallbackImage,
-      ingredients: form.ingredients.map(item => item.trim()).filter(Boolean),
-      instructions: form.instructions.map(item => item.trim()).filter(Boolean),
-    });
+
+    setIsSaving(true);
+    setUploadError('');
+
+    try {
+      let imageUrl = form.image_url.trim() || fallbackImage;
+
+      if (selectedImage) {
+        const uploadedImage = await uploadRecipeImage(selectedImage);
+        imageUrl = uploadedImage.publicUrl;
+      }
+
+      console.log('send data', form);
+
+      await onSave({
+        ...form,
+        title: form.title.trim(),
+        description: form.description.trim(),
+        cooking_time: Math.max(1, Number(form.cooking_time) || 1),
+        servings: Math.max(1, Number(form.servings) || 1),
+        category: form.category.trim(),
+        image_url: imageUrl,
+        ingredients: form.ingredients.map(item => item.trim()).filter(Boolean),
+        instructions: form.instructions.map(item => item.trim()).filter(Boolean),
+        favorite: form.favorite,
+      });
+    } catch (error) {
+      setUploadError(
+        error instanceof Error ? error.message : 'Nepavyko išsaugoti recepto. Bandykite dar kartą.'
+      );
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   return (
@@ -108,7 +158,9 @@ export const RecipeForm = ({ initialRecipe, onSave, onClose }: RecipeFormProps) 
       >
         <div className="modal-heading">
           <div>
-            <p className="eyebrow">{initialRecipe ? 'PRITAIKYKITE SAU' : 'NAUJAS MĖGSTAMAS RECEPTAS'}</p>
+            <p className="eyebrow">
+              {initialRecipe ? 'PRITAIKYKITE SAU' : 'NAUJAS MĖGSTAMAS RECEPTAS'}
+            </p>
             <h2 id="form-title">{initialRecipe ? 'Redaguoti receptą' : 'Pridėti receptą'}</h2>
           </div>
           <button className="icon-button" onClick={onClose} aria-label="Uždaryti formą">
@@ -159,8 +211,8 @@ export const RecipeForm = ({ initialRecipe, onSave, onClose }: RecipeFormProps) 
                 min="1"
                 max="1440"
                 required
-                value={form.time}
-                onChange={event => updateField('time', event.target.value)}
+                value={form.cooking_time}
+                onChange={event => updateField('cooking_time', event.target.value)}
               />
             </label>
             <label>
@@ -175,18 +227,28 @@ export const RecipeForm = ({ initialRecipe, onSave, onClose }: RecipeFormProps) 
               />
             </label>
           </div>
-          <label>
-            Nuotraukos nuoroda
+          <div className="image-upload-field">
+            <label htmlFor="recipe-image">Recepto nuotrauka</label>
+
             <input
-              type="url"
-              value={form.image}
-              onChange={event => updateField('image', event.target.value)}
-              placeholder="https://…"
+              id="recipe-image"
+              type="file"
+              accept="image/jpeg,image/png,image/webp"
+              onChange={handleImageChange}
             />
-            <span className="field-hint">
-              Įklijuokite nuotraukos nuorodą. Įkėlimo funkciją galėsime pridėti prijungę saugyklą.
-            </span>
-          </label>
+
+            {imagePreview && (
+              <img src={imagePreview} alt="Recepto nuotraukos peržiūra" className="image-preview" />
+            )}
+
+            <span className="field-hint">Pasirinkite JPG, PNG arba WebP nuotrauką (iki 5 MB).</span>
+
+            {uploadError && (
+              <p className="upload-error" role="alert">
+                {uploadError}
+              </p>
+            )}
+          </div>
           <fieldset className="list-fieldset">
             <legend>Ingredientai</legend>
             {form.ingredients.map((ingredient, index) => (
@@ -253,9 +315,13 @@ export const RecipeForm = ({ initialRecipe, onSave, onClose }: RecipeFormProps) 
             <button type="button" className="button button-quiet" onClick={onClose}>
               Atšaukti
             </button>
-            <button type="submit" className="button button-primary">
-              {initialRecipe ? 'Išsaugoti pakeitimus' : 'Išsaugoti receptą'}{' '}
-              <ArrowUpRight size={16} />
+            <button type="submit" className="button button-primary" disabled={isSaving}>
+              {isSaving
+                ? 'Išsaugoma...'
+                : initialRecipe
+                  ? 'Išsaugoti pakeitimus'
+                  : 'Išsaugoti receptą'}
+              {!isSaving && <ArrowUpRight size={16} />}
             </button>
           </div>
         </form>
