@@ -1,0 +1,158 @@
+.site-header {
+  display: flex;
+  height: 86px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 28px;
+  padding: 0 8%;
+  border-bottom: 1px solid var(--line);
+}
+
+.brand {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 10px;
+}
+
+.brand-mark {
+  display: grid;
+  width: 34px;
+  height: 34px;
+  place-items: center;
+  border: 1px solid #dfe3dc;
+  border-radius: 50%;
+  color: var(--olive);
+}
+
+.brand-name {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: -0.7px;
+  white-space: nowrap;
+}
+
+.brand-name em {
+  color: var(--olive);
+  font-style: normal;
+  font-weight: 400;
+}
+
+.header-nav {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  margin-left: auto;
+}
+
+.header-actions {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 12px;
+}
+
+.admin-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.admin-status {
+  color: var(--olive);
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.header-auth {
+  min-height: 40px;
+  padding: 0 13px;
+  font-size: var(--font-size-xs);
+  white-space: nowrap;
+}
+
+.nav-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 0;
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.nav-link.active {
+  color: var(--ink);
+  box-shadow: 0 1px 0 var(--terracotta);
+}
+
+@media (min-width: 1300px) {
+  .site-header {
+    padding-left: 10%;
+    padding-right: 10%;
+  }
+}
+
+@media (max-width: 900px) {
+  .site-header {
+    padding-left: 5%;
+    padding-right: 5%;
+  }
+}
+
+@media (max-width: 620px) {
+  .site-header {
+    height: auto;
+    min-height: 72px;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding-top: 12px;
+    padding-bottom: 12px;
+  }
+
+  .brand {
+    gap: 7px;
+  }
+
+  .brand-mark {
+    width: 30px;
+    height: 30px;
+  }
+
+  .brand-name {
+    font-size: 17px;
+  }
+
+  .header-nav {
+    display: none;
+  }
+
+  .header-actions {
+    width: 100%;
+    justify-content: flex-end;
+    gap: 8px;
+  }
+
+  .admin-controls {
+    margin-right: auto;
+  }
+
+  .admin-status {
+    display: none;
+  }
+
+  .header-add {
+    min-height: 38px;
+    padding: 0 11px;
+    font-size: 10px;
+  }
+
+  .header-auth {
+    min-height: 38px;
+    padding: 0 10px;
+    font-size: 10px;
+  }
+}

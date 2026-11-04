@@ -1,0 +1,79 @@
+.site-footer {
+  display: flex;
+  min-height: 95px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 22px 7.2%;
+}
+
+.footer-brand .brand-name {
+  font-size: 17px;
+}
+
+.footer-brand .brand-mark {
+  width: 29px;
+  height: 29px;
+}
+
+.site-footer > span {
+  color: #8b887a;
+  font-size: 7px;
+  letter-spacing: 0.1em;
+}
+
+@media (min-width: 1300px) {
+  .site-footer {
+    padding-left: 9%;
+    padding-right: 9%;
+  }
+}
+
+@media (max-width: 900px) {
+  .site-footer {
+    padding: 22px 5%;
+  }
+}
+
+@media (max-width: 620px) {
+  .site-footer {
+    flex-wrap: wrap;
+    min-height: 90px;
+    justify-content: space-between;
+    gap: 13px;
+  }
+
+  .site-footer > span:nth-of-type(1) {
+    display: none;
+  }
+
+  .site-footer > span:last-child {
+    font-size: 6px;
+  }
+}
+
+.site-footer {
+  padding-left: 8%;
+  padding-right: 8%;
+}
+
+@media (min-width: 1300px) {
+  .site-footer {
+    padding-left: 10%;
+    padding-right: 10%;
+  }
+}
+
+@media (max-width: 900px) {
+  .site-footer {
+    padding-left: 5%;
+    padding-right: 5%;
+  }
+}
+
+@media (max-width: 620px) {
+  .site-footer {
+    padding-left: 5%;
+    padding-right: 5%;
+  }
+}
