@@ -47,7 +47,7 @@ export const HeroSection = () => {
       </div>
       <div className="hero-bottom-rule">
         <span>SEZONIŠKA • PAPRASTA • VISADA SKANU</span>
-        <span>01 TOMAS — JŪSŲ RECEPTŲ KNYGA</span>
+        <span>JŪSŲ RECEPTŲ KNYGA</span>
       </div>
     </section>
   );

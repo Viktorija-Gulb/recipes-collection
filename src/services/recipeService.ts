@@ -18,11 +18,11 @@ export const saveRecipe = async (recipe: RecipeInput, recipeId?: string) => {
   const recipeData = {
     title: recipe.title,
     description: recipe.description,
-    // category: recipe.category,
+    category: recipe.category,
     ingredients: recipe.ingredients,
     instructions: recipe.instructions,
-    // cooking_time: recipe.time,
-    // servings: recipe.servings,
+    cooking_time: recipe.cooking_time,
+    servings: recipe.servings,
     image_url: recipe.image_url,
     // updated_at: new Date().toISOString(),
     favorite: recipe.favorite,
@@ -35,9 +35,10 @@ export const saveRecipe = async (recipe: RecipeInput, recipeId?: string) => {
       .update(recipeData)
       .eq('id', recipeId)
       .select()
-      .single();
+      .maybeSingle();
 
     if (error) throw error;
+    if (!data) throw new Error('Recipe was not updated: no matching row or update permission.');
 
     return data;
   }

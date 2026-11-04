@@ -4,16 +4,14 @@ import { Footer } from './features/Footer/Footer';
 import { Header } from './features/Header/Header';
 import { HeroSection } from './features/HeroSection/HeroSection';
 import { RecipeForm } from './features/RecipeForm/RecipeForm';
-import { Bookmark, Search, SlidersHorizontal, X } from 'lucide-react';
-import { RecipeCard } from './features/RecipeCard/RecipeCard';
 import type { Recipe, RecipeInput, SortOption } from './types';
 import useRecipes from './features/Hooks/useRecipes';
 import { RecipeDetail } from './features/RecipeDetail/RecipeDetail';
-import { recipeCategories } from './constants/recipeCategories';
 import {
   saveRecipe as persistRecipe,
   deleteRecipe as removeRecipe,
 } from './services/recipeService';
+import { RecipesCollection } from './features/RecipesCollection/RecipesCollection';
 
 function App() {
   const { recipes, setRecipes } = useRecipes();
@@ -53,6 +51,7 @@ function App() {
     const favorite = !recipe.favorite;
 
     try {
+      await persistRecipe({ ...recipe, favorite }, recipeId);
       setRecipes(current =>
         current.map(item => (item.id === recipeId ? { ...item, favorite } : item))
       );
@@ -122,120 +121,31 @@ function App() {
       />
       <main>
         <HeroSection />
-        <section className="collection-section" id="recipe-collection">
-          <div className="section-heading">
-            <div>
-              <p className="eyebrow">RECEPTŲ KNYGA</p>
-              <h2>{favoritesOnly ? 'Jūsų mėgstamiausi' : 'Čia laukia gardūs atradimai.'}</h2>
-              <p className="section-description">
-                {favoritesOnly
-                  ? 'Visi jūsų mėgstamiausi receptai vienoje vietoje.'
-                  : 'Vis gausėjanti išbandytų, brangių ir būsimų mėgstamiausių receptų kolekcija.'}
-              </p>
-            </div>
-            <div className="collection-count">
-              <span>{filteredRecipes.length.toString().padStart(2, '0')}</span>
-              <small>
-                RECEPTAI
-                <br />
-                IŠ VISO
-              </small>
-            </div>
-          </div>
+        <RecipesCollection
+          filteredRecipes={filteredRecipes}
+          query={query}
+          setQuery={setQuery}
+          activeCategory={activeCategory}
+          setActiveCategory={setActiveCategory}
+          favoritesOnly={favoritesOnly}
+          setFavoritesOnly={setFavoritesOnly}
+          sortBy={sortBy}
+          setSortBy={setSortBy}
+          mobileFiltersOpen={mobileFiltersOpen}
+          setMobileFiltersOpen={setMobileFiltersOpen}
+          toggleFavorite={toggleFavorite}
+          openAddForm={openAddForm}
+          setSelectedRecipeId={setSelectedRecipeId}
+        />
 
-          <div className="collection-tools">
-            <div className="search-box">
-              <Search size={18} />
-              <input
-                value={query}
-                onChange={event => setQuery(event.target.value)}
-                placeholder="Ieškoti recepto ar ingrediento…"
-                aria-label="Ieškoti receptų"
-              />
-              {query && (
-                <button
-                  className="clear-search"
-                  onClick={() => setQuery('')}
-                  aria-label="Išvalyti paiešką"
-                >
-                  <X size={16} />
-                </button>
-              )}
-            </div>
-            <button
-              className={`filter-toggle ${mobileFiltersOpen ? 'is-open' : ''}`}
-              onClick={() => setMobileFiltersOpen(open => !open)}
-            >
-              <SlidersHorizontal size={16} /> Filtrai
-            </button>
-            <label className="sort-control">
-              <span>Rikiuoti</span>
-              <select
-                value={sortBy}
-                onChange={event => setSortBy(event.target.value as SortOption)}
-                aria-label="Rikiuoti receptus"
-              >
-                <option value="newest">Naujausi</option>
-                <option value="quickest">Greičiausi</option>
-                <option value="alphabetical">Pagal abėcėlę</option>
-              </select>
-            </label>
-          </div>
-
-          <div
-            className={`category-list ${mobileFiltersOpen ? 'show-mobile' : ''}`}
-            aria-label="Filtruoti pagal kategoriją"
-          >
-            {recipeCategories.map(({ value, label }) => (
-              <button
-                key={value}
-                className={`category-button ${activeCategory === value ? 'selected' : ''}`}
-                onClick={() => {
-                  setActiveCategory(value);
-                  setMobileFiltersOpen(false);
-                }}
-              >
-                {label}
-              </button>
-            ))}
-          </div>
-
-          {filteredRecipes?.length > 0 ? (
-            <div className="recipe-grid">
-              {filteredRecipes.map(recipe => (
-                <RecipeCard
-                  key={recipe.id}
-                  recipe={recipe}
-                  onOpen={item => setSelectedRecipeId(item.id)}
-                  onToggleFavorite={toggleFavorite}
-                />
-              ))}
-            </div>
-          ) : (
-            <div className="empty-state">
-              <span className="empty-icon">
-                <Bookmark size={23} />
-              </span>
-              <h3>Kol kas čia dar nieko nėra.</h3>
-              <p>Pabandykite kitą paiešką arba pridėkite receptą į savo kolekciją.</p>
-              <button
-                className="button button-primary"
-                onClick={
-                  query || activeCategory !== 'All recipes' || favoritesOnly
-                    ? () => {
-                        setQuery('');
-                        setActiveCategory('All recipes');
-                        setFavoritesOnly(false);
-                      }
-                    : openAddForm
-                }
-              >
-                {query || activeCategory !== 'All recipes' || favoritesOnly
-                  ? 'Išvalyti filtrus'
-                  : 'Pridėti pirmą receptą'}
-              </button>
-            </div>
-          )}
+        <section className="quote-section">
+          <span className="quote-mark">“</span>
+          <p>
+            Dalydamiesi receptais,
+            <br />
+            <em>dalijamės prisiminimais.</em>
+          </p>
+          <span className="quote-credit">SU MEILE IŠ MŪSŲ VIRTUVĖS</span>
         </section>
       </main>
       <Footer />
