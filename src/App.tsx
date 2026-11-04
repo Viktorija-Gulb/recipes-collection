@@ -11,6 +11,10 @@ import useRecipeActions from './features/Hooks/useRecipeActions';
 import useRecipes from './features/Hooks/useRecipes';
 import './App.css';
 
+import { isAdmin } from './utils/isAdmin';
+import { supabase } from './config/supabase';
+import { useAuth } from './features/Auth/useAuth';
+
 function App() {
   const { recipes, setRecipes } = useRecipes();
   const [query, setQuery] = useState('');
@@ -21,6 +25,18 @@ function App() {
   const [favoritesOnly, setFavoritesOnly] = useState(false);
   const [sortBy, setSortBy] = useState<SortOption>('newest');
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
+
+  const { user, loading } = useAuth();
+
+  const admin = isAdmin(user?.id);
+
+  const handleLogout = async () => {
+    const { error } = await supabase.auth.signOut();
+
+    if (error) {
+      console.error('Logout failed:', error);
+    }
+  };
 
   const selectedRecipe = recipes.find(recipe => recipe.id === selectedRecipeId) || null;
 
@@ -78,6 +94,9 @@ function App() {
         setFavoritesOnly={setFavoritesOnly}
         setQuery={setQuery}
         favoritesOnly={favoritesOnly}
+        authLoading={loading}
+        isAdmin={admin}
+        onLogout={handleLogout}
       />
       <main>
         <HeroSection />

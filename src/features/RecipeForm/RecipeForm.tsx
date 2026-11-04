@@ -1,14 +1,8 @@
-import {
-  useEffect,
-  useState,
-  type SubmitEvent,
-  type MouseEvent,
-  type ChangeEvent,
-} from 'react';
+import type { MouseEvent } from 'react';
 import { X, Plus, ArrowUpRight } from 'lucide-react';
 import { recipeCategories } from '../../constants/recipeCategories';
-import { uploadRecipeImage } from '../../services/uploadImageService';
 import type { Recipe, RecipeInput } from '../../types';
+import useRecipeForm from './useRecipeForm';
 
 import './RecipeForm.css';
 
@@ -18,135 +12,19 @@ type RecipeFormProps = {
   onClose: () => void;
 };
 
-type RecipeFormState = Omit<Recipe, 'id' | 'created_at'> & {
-  cooking_time: number | string;
-  servings: number | string;
-};
-
-type RecipeListField = 'ingredients' | 'instructions';
-
-//TODO: duplicates in another component
-const fallbackImage =
-  'https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&w=1200&q=85';
-
 export const RecipeForm = ({ initialRecipe, onSave, onClose }: RecipeFormProps) => {
-  const [form, setForm] = useState<RecipeFormState>(() =>
-    initialRecipe
-      ? { ...initialRecipe }
-      : {
-          title: '',
-          description: '',
-          category: 'Dinner',
-          cooking_time: 30,
-          servings: 2,
-          image_url: '',
-          ingredients: [''],
-          instructions: [''],
-          favorite: false,
-        }
-  );
-
-  const [selectedImage, setSelectedImage] = useState<File | null>(null);
-  const [imagePreview, setImagePreview] = useState(form.image_url || fallbackImage);
-  const [uploadError, setUploadError] = useState('');
-  const [isSaving, setIsSaving] = useState(false);
-
-  useEffect(() => {
-    return () => {
-      if (imagePreview.startsWith('blob:')) {
-        URL.revokeObjectURL(imagePreview);
-      }
-    };
-  }, [imagePreview]);
-
-  const handleImageChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-
-    if (!file) return;
-
-    const allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
-
-    if (!allowedTypes.includes(file.type)) {
-      setUploadError('Pasirinkite JPG, PNG arba WebP nuotrauką.');
-      event.target.value = '';
-      return;
-    }
-
-    if (file.size > 5 * 1024 * 1024) {
-      setUploadError('Nuotrauka negali būti didesnė nei 5 MB.');
-      event.target.value = '';
-      return;
-    }
-
-    setSelectedImage(file);
-    setImagePreview(URL.createObjectURL(file));
-    setUploadError('');
-  };
-
-  const updateField = (
-    field: 'title' | 'description' | 'category' | 'cooking_time' | 'servings' | 'image_url',
-    value: string
-  ) =>
-    setForm(
-      current =>
-        ({
-          ...current,
-          [field]: value,
-        }) as RecipeFormState
-    );
-
-  const updateListItem = (field: RecipeListField, index: number, value: string) => {
-    setForm(current => ({
-      ...current,
-      [field]: current[field].map((item, itemIndex) => (itemIndex === index ? value : item)),
-    }));
-  };
-
-  const addListItem = (field: RecipeListField) =>
-    setForm(current => ({ ...current, [field]: [...current[field], ''] }));
-
-  const removeListItem = (field: RecipeListField, index: number) =>
-    setForm(current => ({
-      ...current,
-      [field]: current[field].filter((_, itemIndex) => itemIndex !== index),
-    }));
-
-  const handleSubmit = async (event: SubmitEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
-    setIsSaving(true);
-    setUploadError('');
-
-    try {
-      let imageUrl = form.image_url.trim() || fallbackImage;
-
-      if (selectedImage) {
-        const uploadedImage = await uploadRecipeImage(selectedImage);
-        imageUrl = uploadedImage.publicUrl;
-      }
-
-      console.log('send data', form);
-
-      await onSave({
-        ...form,
-        title: form.title.trim(),
-        description: form.description.trim(),
-        cooking_time: Math.max(1, Number(form.cooking_time) || 1),
-        servings: Math.max(1, Number(form.servings) || 1),
-        category: form.category.trim(),
-        image_url: imageUrl,
-        ingredients: form.ingredients.map(item => item.trim()).filter(Boolean),
-        instructions: form.instructions.map(item => item.trim()).filter(Boolean),
-        favorite: form.favorite,
-      });
-    } catch (error) {
-      setUploadError(
-        error instanceof Error ? error.message : 'Nepavyko išsaugoti recepto. Bandykite dar kartą.'
-      );
-    } finally {
-      setIsSaving(false);
-    }
-  };
+  const {
+    form,
+    imagePreview,
+    formError,
+    isSaving,
+    handleImageChange,
+    handleSubmit,
+    updateField,
+    updateListItem,
+    addListItem,
+    removeListItem,
+  } = useRecipeForm({ initialRecipe, onSave });
 
   return (
     <div
@@ -249,9 +127,9 @@ export const RecipeForm = ({ initialRecipe, onSave, onClose }: RecipeFormProps) 
 
             <span className="field-hint">Pasirinkite JPG, PNG arba WebP nuotrauką (iki 5 MB).</span>
 
-            {uploadError && (
+            {formError && (
               <p className="upload-error" role="alert">
-                {uploadError}
+                {formError}
               </p>
             )}
           </div>
