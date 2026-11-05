@@ -1,6 +1,6 @@
 .collection-section {
-  padding: 85px 7.2% 95px;
-  background: #fffdf9;
+  padding: 83px 8% 95px;
+  background: #fafbf9;
 }
 
 .section-heading {
@@ -18,9 +18,9 @@
   margin: 0;
   font-family: var(--serif);
   font-size: clamp(31px, 3.8vw, 48px);
-  font-weight: 400;
   line-height: 1.2;
-  letter-spacing: -0.04em;
+  font-weight: 500;
+  letter-spacing: -0.055em;
 }
 
 .section-description {
@@ -38,9 +38,9 @@
 }
 
 .collection-count > span {
-  color: var(--terracotta);
   font-family: var(--serif);
-  font-size: 41px;
+  color: var(--olive);
+  font-size: 35px;
 }
 
 .collection-count small {
@@ -133,12 +133,12 @@
 
 .category-button {
   padding: 9px 15px;
-  border: 1px solid #e6e1d7;
-  border-radius: 2px;
+  border: 1px solid #e4e7e1;
   background: transparent;
   color: #7e7a6e;
   font-size: 10px;
   transition: 0.2s;
+  border-radius: 4px;
 }
 
 .category-button:hover {
@@ -147,9 +147,9 @@
 }
 
 .category-button.selected {
-  border-color: var(--olive);
-  background: var(--olive);
   color: white;
+  border-color: var(--ink);
+  background: var(--ink);
 }
 
 .recipe-grid {
@@ -191,24 +191,6 @@
   line-height: 1.8;
 }
 
-@media (min-width: 1300px) {
-  .collection-section {
-    padding-left: 9%;
-    padding-right: 9%;
-  }
-}
-
-@media (max-width: 900px) {
-  .collection-section {
-    padding: 70px 5% 75px;
-  }
-
-  .recipe-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 35px 20px;
-  }
-}
-
 @media (max-width: 620px) {
   .collection-section {
     padding: 57px 5% 62px;
@@ -216,10 +198,6 @@
 
   .section-heading {
     align-items: flex-start;
-  }
-
-  .section-heading h2 {
-    font-size: 34px;
   }
 
   .section-description {
@@ -278,47 +256,20 @@
   }
 }
 
-.collection-section {
-  padding: 83px 8% 95px;
-  background: #fafbf9;
-}
+@media (max-width: 900px) {
+  .collection-section {
+    padding: 70px 5% 75px;
+  }
 
-.section-heading h2 {
-  font-family: 'DM Sans', sans-serif;
-  font-weight: 500;
-  letter-spacing: -0.055em;
-}
-
-.collection-count > span {
-  color: var(--olive);
-  font-size: 35px;
-}
-
-.category-button {
-  border-color: #e4e7e1;
-  border-radius: 4px;
-}
-
-.category-button.selected {
-  border-color: var(--ink);
-  background: var(--ink);
+  .recipe-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 35px 20px;
+  }
 }
 
 @media (min-width: 1300px) {
   .collection-section {
     padding-left: 10%;
     padding-right: 10%;
-  }
-}
-
-@media (max-width: 900px) {
-  .collection-section {
-    padding: 70px 5% 75px;
-  }
-}
-
-@media (max-width: 620px) {
-  .collection-section {
-    padding: 57px 5% 62px;
   }
 }

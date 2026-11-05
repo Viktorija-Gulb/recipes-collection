@@ -51,29 +51,3 @@
     font-size: 6px;
   }
 }
-
-.site-footer {
-  padding-left: 8%;
-  padding-right: 8%;
-}
-
-@media (min-width: 1300px) {
-  .site-footer {
-    padding-left: 10%;
-    padding-right: 10%;
-  }
-}
-
-@media (max-width: 900px) {
-  .site-footer {
-    padding-left: 5%;
-    padding-right: 5%;
-  }
-}
-
-@media (max-width: 620px) {
-  .site-footer {
-    padding-left: 5%;
-    padding-right: 5%;
-  }
-}

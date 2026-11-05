@@ -45,9 +45,9 @@
   width: 100%;
   min-width: 0;
   padding: 11px 12px;
-  border: 1px solid #ded8cb;
-  border-radius: 0;
-  background: #fffdf9;
+  border: 1px solid #e0e4dc;
+  border-radius: 4px;
+  background: #fff;
   color: var(--ink);
   font-size: var(--font-size-xs);
   font-weight: 400;
@@ -161,14 +161,6 @@
     flex: 1;
     padding: 0 10px;
   }
-}
-
-.recipe-form input,
-.recipe-form textarea,
-.recipe-form select {
-  border-color: #e0e4dc;
-  border-radius: 4px;
-  background: #fff;
 }
 
 .image-upload-field {
