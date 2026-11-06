@@ -34,7 +34,7 @@
   padding: 7px 10px;
   background: var(--paper);
   color: var(--olive);
-  font-size: 0.5rem;
+  font-size: var(--font-size-xxs);
   font-weight: 600;
   letter-spacing: 0.05em;
   border-radius: 3px;
@@ -81,7 +81,7 @@
   align-items: center;
   gap: 7px;
   color: #898679;
-  font-size: 0.5625rem;
+  font-size: var(--font-size-xxs);
 }
 
 .meta-dot {
@@ -103,8 +103,8 @@
   margin-top: 8px;
   overflow: hidden;
   color: #858174;
-  font-size: 0.625rem;
-  line-height: 1.8;
+  font-size: var(--font-size-sm);
+  line-height: 1.5;
   line-clamp: 2;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
@@ -118,7 +118,7 @@
   padding-bottom: 5px;
   border-bottom: 1px solid #c5c8bb;
   color: var(--olive);
-  font-size: 0.5625rem;
+  font-size: var(--font-size-xs);
   font-weight: 600;
 }
 
@@ -131,7 +131,6 @@
     bottom: 8px;
     left: 8px;
     padding: 6px 7px;
-    font-size: 0.4375rem;
   }
 
   .favorite-button {
@@ -151,22 +150,13 @@
 
   .card-meta {
     gap: 4px;
-    font-size: 0.5rem;
   }
 
   .card-title {
     margin-top: 8px;
-    font-size: 1.125rem;
-  }
-
-  .card-description {
-    min-height: 52px;
-    font-size: 0.5625rem;
-    line-height: 1.65;
   }
 
   .read-recipe {
     margin-top: 10px;
-    font-size: 0.5rem;
   }
 }

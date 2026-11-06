@@ -132,7 +132,7 @@
   padding: 11px 0;
   border-bottom: 1px solid #e7e2d8;
   color: #626256;
-  font-size: var(--font-size-base);
+  font-size: var(--font-size-sm);
   line-height: 1.6;
 }
 
@@ -166,13 +166,12 @@
 .instruction-list p {
   margin: 0;
   color: #626256;
-  font-size: 0.6875rem;
-  line-height: 1.8;
+  font-size: var(--font-size-sm);
 }
 
 .muted-copy {
   color: var(--muted);
-  font-size: 0.6875rem;
+  font-size: var(--font-size-sm);
 }
 
 .detail-actions {
@@ -193,10 +192,6 @@
     padding: 23px 18px;
   }
 
-  .detail-title {
-    font-size: 2rem;
-  }
-
   .detail-stats {
     gap: 15px;
   }
@@ -208,14 +203,6 @@
 
   .detail-stats svg {
     width: 15px;
-  }
-
-  .detail-stats strong {
-    font-size: 0.625rem;
-  }
-
-  .detail-stats small {
-    font-size: 0.5rem;
   }
 
   .detail-columns {

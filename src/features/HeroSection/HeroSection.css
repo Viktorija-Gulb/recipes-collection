@@ -30,7 +30,7 @@
   max-width: 390px;
   margin: 23px 0 26px;
   color: var(--muted);
-  font-size: 13px;
+  font-size: var(--font-size-sm);
   line-height: 1.9;
 }
 
@@ -41,7 +41,7 @@
   margin-top: 31px;
   color: #858174;
   font-family: var(--serif);
-  font-size: 12px;
+  font-size: var(--font-size-xs);
   font-style: italic;
 }
 
@@ -84,7 +84,7 @@
 }
 
 .hero-stamp span {
-  font-size: 6px;
+  font-size: var(--font-size-xxs);
   font-weight: 700;
   letter-spacing: 0.13em;
 }
@@ -95,13 +95,13 @@
   gap: 12px;
   padding-top: 12px;
   color: var(--muted);
-  font-size: 8px;
+  font-size: var(--font-size-xxs);
   letter-spacing: 0.09em;
 }
 
 .hero-caption span:last-child {
   font-family: var(--serif);
-  font-size: 11px;
+  font-size: var(--font-size-xs);
   font-style: italic;
   letter-spacing: 0;
 }
@@ -115,7 +115,7 @@
   padding-top: 14px;
   border-top: 1px solid var(--line);
   color: #8b887a;
-  font-size: 8px;
+  font-size: var(--font-size-xxs);
   letter-spacing: 0.12em;
 }
 
@@ -151,7 +151,7 @@
 
   .hero-copy .eyebrow {
     margin-bottom: 15px;
-    font-size: 8px;
+    font-size: var(--font-size-xxs);
   }
 
   .hero-copy h1 {
@@ -160,7 +160,7 @@
 
   .hero-description {
     margin: 17px 0 20px;
-    font-size: 12px;
+    font-size: var(--font-size-xs);
   }
 
   .hero-note {
@@ -180,7 +180,7 @@
 
   .hero-bottom-rule {
     margin-top: 25px;
-    font-size: 6px;
+    font-size: var(--font-size-xxs);
   }
 
   .hero-bottom-rule span:last-child {

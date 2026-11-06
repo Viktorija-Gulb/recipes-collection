@@ -7,19 +7,9 @@
   padding: 22px 7.2%;
 }
 
-.footer-brand .brand-name {
-  font-size: 17px;
-}
-
-.footer-brand .brand-mark {
-  width: 29px;
-  height: 29px;
-}
-
 .site-footer > span {
   color: #8b887a;
-  font-size: 7px;
-  letter-spacing: 0.1em;
+  font-size: var(--font-size-xxs);
 }
 
 @media (min-width: 1300px) {
@@ -48,6 +38,6 @@
   }
 
   .site-footer > span:last-child {
-    font-size: 6px;
+    font-size: var(--font-size-xs);
   }
 }
