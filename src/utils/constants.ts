@@ -5,11 +5,8 @@ export const recipeCategories = [
   { value: 'Dinner', label: 'Vakarienė' },
   { value: 'Dessert', label: 'Desertai' },
   { value: 'Snacks', label: 'Užkandžiai' },
-]
+];
 
-const categoryLabels = new Map(
-  recipeCategories.map(({ value, label }) => [value, label])
-)
+const categoryLabels = new Map(recipeCategories.map(({ value, label }) => [value, label]));
 
-export const getCategoryLabel = (category: string) =>
-  categoryLabels.get(category) ?? category
+export const getCategoryLabel = (category: string) => categoryLabels.get(category) ?? category;

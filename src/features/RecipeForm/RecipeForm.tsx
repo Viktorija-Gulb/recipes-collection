@@ -1,6 +1,6 @@
 import type { MouseEvent } from 'react';
 import { X, Plus, ArrowUpRight } from 'lucide-react';
-import { recipeCategories } from '../../constants/recipeCategories';
+import { recipeCategories } from '../../utils/constants';
 import type { Recipe, RecipeInput } from '../../types';
 import useRecipeForm from './useRecipeForm';
 
@@ -190,6 +190,7 @@ export const RecipeForm = ({ initialRecipe, onSave, onClose }: RecipeFormProps) 
             <button
               type="button"
               className="text-button"
+              disabled={isSaving}
               onClick={() => addListItem('instructions')}
             >
               <Plus size={15} /> Pridėti žingsnį

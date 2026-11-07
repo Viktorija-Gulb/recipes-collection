@@ -1,8 +1,9 @@
 import { X, Heart, Clock3, ChefHat, Leaf } from 'lucide-react';
 import type { MouseEvent } from 'react';
-import { getCategoryLabel } from '../../constants/recipeCategories';
+import { getCategoryLabel } from '../../utils/constants';
 import './RecipeDetail.css';
 import type { Recipe } from '../../types';
+import fallbackImage from '../../assets/images/fallback-image.webp';
 
 type RecipeDetailProps = {
   recipe: Recipe;
@@ -12,9 +13,6 @@ type RecipeDetailProps = {
   onDelete: () => void;
   isAdmin: boolean;
 };
-
-const fallbackImage =
-  'https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&w=1200&q=85';
 
 export const RecipeDetail = ({
   recipe,

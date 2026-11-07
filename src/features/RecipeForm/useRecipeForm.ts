@@ -1,6 +1,7 @@
 import { useEffect, useState, type ChangeEvent, type SubmitEvent } from 'react';
 import { uploadRecipeImage } from '../../services/uploadImageService';
 import type { Recipe, RecipeInput } from '../../types';
+import fallbackImage from '../../assets/images/fallback-image.webp';
 
 type RecipeFormState = Omit<Recipe, 'id' | 'created_at' | 'cooking_time' | 'servings'> & {
   cooking_time: number | string;
@@ -15,9 +16,6 @@ type UseRecipeFormOptions = {
   initialRecipe: Recipe | null;
   onSave: (recipe: RecipeInput) => Promise<void>;
 };
-
-const fallbackImage =
-  'https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&w=1200&q=85';
 
 const createInitialForm = (recipe: Recipe | null): RecipeFormState =>
   recipe
@@ -95,6 +93,8 @@ const useRecipeForm = ({ initialRecipe, onSave }: UseRecipeFormOptions) => {
 
   const handleSubmit = async (event: SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
+
+    if (isSaving) return;
 
     setIsSaving(true);
     setFormError('');
