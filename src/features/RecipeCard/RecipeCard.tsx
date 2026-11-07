@@ -1,6 +1,7 @@
 import { Heart, Clock3, ArrowUpRight } from 'lucide-react';
-import { getCategoryLabel } from '../../constants/recipeCategories';
+import { getCategoryLabel } from '../../utils/constants';
 import type { Recipe } from '../../types';
+import fallbackImage from '../../assets/images/fallback-image.webp';
 import './RecipeCard.css';
 
 type RecipeCardProps = {
@@ -8,10 +9,6 @@ type RecipeCardProps = {
   onOpen: (recipe: Recipe) => void;
   onToggleFavorite: (recipeId: string) => void;
 };
-
-//TODO: duplicate
-const fallbackImage =
-  'https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&w=1200&q=85';
 
 export const RecipeCard = ({ recipe, onOpen, onToggleFavorite }: RecipeCardProps) => {
   return (
@@ -26,6 +23,7 @@ export const RecipeCard = ({ recipe, onOpen, onToggleFavorite }: RecipeCardProps
           src={recipe.image_url || fallbackImage}
           alt={recipe.title}
           loading="lazy"
+          decoding="async"
         />
         <span className="category-tag">{getCategoryLabel(recipe.category)}</span>
       </button>

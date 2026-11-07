@@ -1,6 +1,6 @@
 import React from 'react';
 import type { Recipe, SortOption } from '../../types';
-import { recipeCategories } from '../../constants/recipeCategories';
+import { recipeCategories } from '../../utils/constants';
 import { RecipeCard } from '../RecipeCard/RecipeCard';
 import { ArrowUpRight, Bookmark, Plus, Search, SlidersHorizontal, X } from 'lucide-react';
 import './RecipeCollection.css';
