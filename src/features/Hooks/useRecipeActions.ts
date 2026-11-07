@@ -1,49 +1,68 @@
-import type { Dispatch, SetStateAction } from 'react';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import {
   setRecipeFavorite,
-  saveRecipe as persistRecipe,
   deleteRecipe as persistDeleteRecipe,
+  uploadRecipe,
+  getRecipes,
 } from '../../services/recipeService';
-import type { Recipe, RecipeInput } from '../../types';
+import type { RecipeInput } from '../../types';
+
+export const recipesQueryKey = ['recipes'] as const;
+
+export const useGetRecipes = () => {
+  const query = useQuery({
+    queryKey: recipesQueryKey,
+    queryFn: getRecipes,
+  });
+
+  return {
+    recipes: query.data ?? [],
+    loading: query.isPending,
+    error: query.error?.message ?? null,
+  };
+};
+
+type SaveRecipeVariables = {
+  recipe: RecipeInput;
+  recipeId?: string;
+};
+
+export const useSaveRecipe = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ recipe, recipeId }: SaveRecipeVariables) => uploadRecipe(recipe, recipeId),
+
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: recipesQueryKey }),
+  });
+};
+
+export const useDeleteRecipe = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (recipeId: string) => persistDeleteRecipe(recipeId),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: recipesQueryKey }),
+  });
+};
 
 const favoriteSaveErrorMessage = 'Nepavyko išsaugoti mėgstamiausio recepto. Bandykite dar kartą.';
 
-const useRecipeActions = (recipes: Recipe[], setRecipes: Dispatch<SetStateAction<Recipe[]>>) => {
-  const toggleFavorite = async (recipeId: string): Promise<void> => {
-    const recipe = recipes.find(item => item.id === recipeId);
-    if (!recipe) return;
-
-    const favorite = !recipe.favorite;
-
-    try {
-      await setRecipeFavorite(recipeId, favorite);
-      setRecipes(current =>
-        current.map(item => (item.id === recipeId ? { ...item, favorite } : item))
-      );
-    } catch (error) {
-      console.error('Failed to save favorite:', error);
-      window.alert(favoriteSaveErrorMessage);
-    }
-  };
-
-  const saveRecipe = async (formData: RecipeInput, recipeId?: string): Promise<string> => {
-    const savedRecipe: Recipe = await persistRecipe(formData, recipeId);
-
-    setRecipes(current =>
-      recipeId
-        ? current.map(recipe => (recipe.id === savedRecipe.id ? savedRecipe : recipe))
-        : [savedRecipe, ...current]
-    );
-
-    return savedRecipe.id;
-  };
-
-  const deleteRecipe = async (recipeId: string): Promise<void> => {
-    await persistDeleteRecipe(recipeId);
-    setRecipes(current => current.filter(recipe => recipe.id !== recipeId));
-  };
-
-  return { toggleFavorite, saveRecipe, deleteRecipe };
+type ToggleFavoriteVariables = {
+  recipeId: string;
+  favorite: boolean;
 };
 
-export default useRecipeActions;
+export const useToggleFavorite = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ recipeId, favorite }: ToggleFavoriteVariables) =>
+      setRecipeFavorite(recipeId, favorite),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: recipesQueryKey }),
+    onError: (error: unknown) => {
+      console.error('Failed to save favorite:', error);
+      window.alert(favoriteSaveErrorMessage);
+    },
+  });
+};

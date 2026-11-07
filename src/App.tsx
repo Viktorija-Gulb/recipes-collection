@@ -7,8 +7,12 @@ import { RecipeDetail } from './features/RecipeDetail/RecipeDetail';
 import { RecipesCollection } from './features/RecipesCollection/RecipesCollection';
 import type { Recipe, RecipeInput, SortOption } from './types';
 import useFilteredRecipes from './features/Hooks/useFilteredRecipes';
-import useRecipeActions from './features/Hooks/useRecipeActions';
-import useRecipes from './features/Hooks/useRecipes';
+import {
+  useDeleteRecipe,
+  useGetRecipes,
+  useSaveRecipe,
+  useToggleFavorite,
+} from './features/Hooks/useRecipeActions';
 import './App.css';
 
 import { isAdmin } from './utils/isAdmin';
@@ -16,7 +20,7 @@ import { supabase } from './config/supabase';
 import { useAuth } from './features/Auth/useAuth';
 
 function App() {
-  const { recipes, setRecipes } = useRecipes();
+  const { recipes } = useGetRecipes();
   const [query, setQuery] = useState('');
   const [activeCategory, setActiveCategory] = useState('All recipes');
   const [formOpen, setFormOpen] = useState(false);
@@ -27,7 +31,6 @@ function App() {
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
 
   const { user, loading } = useAuth();
-
   const admin = isAdmin(user?.id);
 
   const handleLogout = async () => {
@@ -40,20 +43,27 @@ function App() {
 
   const selectedRecipe = recipes.find(recipe => recipe.id === selectedRecipeId) || null;
 
-  const {
-    toggleFavorite,
-    saveRecipe: saveRecipeAction,
-    deleteRecipe: deleteRecipeAction,
-  } = useRecipeActions(recipes, setRecipes);
+  const { mutate: saveRecipeMutation } = useSaveRecipe();
+  const deleteRecipeMutation = useDeleteRecipe();
+
+  const favoriteMutation = useToggleFavorite();
+
+  const toggleFavorite = (recipeId: string) => {
+    const recipe = recipes.find(item => item.id === recipeId);
+    if (!recipe) return;
+
+    favoriteMutation.mutate({
+      recipeId,
+      favorite: !recipe.favorite,
+    });
+  };
 
   const saveRecipe = async (formData: RecipeInput) => {
     if (!admin) {
       throw new Error('Only an admin can add or edit recipes.');
     }
 
-    const recipeId = await saveRecipeAction(formData, editingRecipe?.id);
-
-    setSelectedRecipeId(recipeId);
+    saveRecipeMutation({ recipe: formData, recipeId: editingRecipe?.id });
     setFormOpen(false);
     setEditingRecipe(null);
   };
@@ -83,7 +93,7 @@ function App() {
     if (!admin || !selectedRecipe) return;
 
     try {
-      await deleteRecipeAction(selectedRecipe.id);
+      await deleteRecipeMutation.mutateAsync(selectedRecipe.id);
       setSelectedRecipeId(null);
     } catch (error) {
       console.error('Failed to delete recipe:', error);
