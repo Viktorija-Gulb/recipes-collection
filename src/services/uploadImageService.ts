@@ -29,7 +29,14 @@ export const uploadRecipeImage = async (file: File): Promise<UploadedRecipeImage
     throw error;
   }
 
-  const { data: publicUrlData } = supabase.storage.from('recipe-images').getPublicUrl(data.path);
+  const { data: publicUrlData } = supabase.storage.from('recipe-images').getPublicUrl(data.path, {
+    transform: {
+      width: 600,
+      height: 400,
+      quality: 80,
+      resize: 'cover',
+    },
+  });
 
   return {
     path: data.path,

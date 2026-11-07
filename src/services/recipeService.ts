@@ -14,7 +14,7 @@ export const getRecipes = async () => {
   return data;
 };
 
-export const saveRecipe = async (recipe: RecipeInput, recipeId?: string) => {
+export const uploadRecipe = async (recipe: RecipeInput, recipeId?: string) => {
   const recipeData = {
     title: recipe.title,
     description: recipe.description,

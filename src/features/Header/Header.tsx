@@ -1,7 +1,8 @@
 import { useState } from 'react';
-import { Heart, Leaf, Plus } from 'lucide-react';
+import { Heart, Plus } from 'lucide-react';
 import { LoginForm } from '../Auth/LoginForm';
 import './Header.css';
+import { Brand } from '../../common/Brand/Brand';
 
 interface HeaderProps {
   openAddForm: () => void;
@@ -28,28 +29,17 @@ export const Header = ({
 }: HeaderProps) => {
   const [loginOpen, setLoginOpen] = useState(false);
 
+  const reset = () => {
+    setSelectedRecipeId(null);
+    setActiveCategory('All recipes');
+    setFavoritesOnly(false);
+    setQuery('');
+  };
+
   return (
     <>
       <header className="site-header">
-        <a
-          className="brand"
-          href="#"
-          onClick={event => {
-            event.preventDefault();
-            setSelectedRecipeId(null);
-            setActiveCategory('All recipes');
-            setFavoritesOnly(false);
-            setQuery('');
-          }}
-          aria-label="Sekmadienio stalo pradinis puslapis"
-        >
-          <span className="brand-mark">
-            <Leaf size={19} />
-          </span>
-          <span className="brand-name">
-            sekmadienio <em>stalas</em>
-          </span>
-        </a>
+        <Brand reset={reset} />
         <nav className="header-nav" aria-label="Pagrindinė navigacija">
           <button
             className={!favoritesOnly ? 'nav-link active' : 'nav-link'}

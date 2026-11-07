@@ -1,0 +1,41 @@
+.brand {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 10px;
+}
+
+.brand-mark {
+  display: grid;
+  width: 34px;
+  height: 34px;
+  place-items: center;
+  border: 1px solid #dfe3dc;
+  border-radius: 50%;
+  color: var(--olive);
+}
+
+.brand-name {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: -0.7px;
+  white-space: nowrap;
+}
+
+.brand-name em {
+  color: var(--olive);
+  font-style: normal;
+  font-weight: 400;
+}
+
+@media (max-width: 620px) {
+  .brand {
+    gap: 7px;
+  }
+
+  .brand-mark {
+    width: 30px;
+    height: 30px;
+  }
+}

@@ -12,6 +12,7 @@
   border: 0;
   background: var(--paper-deep);
   text-align: left;
+  border-radius: 5px;
 }
 
 .recipe-image {
@@ -33,9 +34,10 @@
   padding: 7px 10px;
   background: var(--paper);
   color: var(--olive);
-  font-size: 0.5rem;
+  font-size: var(--font-size-xxs);
   font-weight: 600;
   letter-spacing: 0.05em;
+  border-radius: 3px;
 }
 
 .favorite-button {
@@ -46,10 +48,10 @@
   width: 36px;
   height: 36px;
   place-items: center;
-  border: 0;
   border-radius: 50%;
   background: rgba(255, 253, 249, 0.94);
   color: #6e6d61;
+  border: 1px solid rgba(255, 255, 255, 0.7);
   transition:
     color 0.2s,
     transform 0.2s;
@@ -79,7 +81,7 @@
   align-items: center;
   gap: 7px;
   color: #898679;
-  font-size: 0.5625rem;
+  font-size: var(--font-size-xxs);
 }
 
 .meta-dot {
@@ -91,7 +93,8 @@
   font-family: var(--serif);
   font-size: clamp(1.1875rem, 1.8vw, 1.5rem);
   line-height: 1.3;
-  letter-spacing: -0.025em;
+  font-weight: 500;
+  letter-spacing: -0.04em;
 }
 
 .card-description {
@@ -100,8 +103,8 @@
   margin-top: 8px;
   overflow: hidden;
   color: #858174;
-  font-size: 0.625rem;
-  line-height: 1.8;
+  font-size: var(--font-size-sm);
+  line-height: 1.5;
   line-clamp: 2;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
@@ -115,7 +118,7 @@
   padding-bottom: 5px;
   border-bottom: 1px solid #c5c8bb;
   color: var(--olive);
-  font-size: 0.5625rem;
+  font-size: var(--font-size-xs);
   font-weight: 600;
 }
 
@@ -128,7 +131,6 @@
     bottom: 8px;
     left: 8px;
     padding: 6px 7px;
-    font-size: 0.4375rem;
   }
 
   .favorite-button {
@@ -148,43 +150,13 @@
 
   .card-meta {
     gap: 4px;
-    font-size: 0.5rem;
   }
 
   .card-title {
     margin-top: 8px;
-    font-size: 1.125rem;
-  }
-
-  .card-description {
-    min-height: 52px;
-    font-size: 0.5625rem;
-    line-height: 1.65;
   }
 
   .read-recipe {
     margin-top: 10px;
-    font-size: 0.5rem;
   }
-}
-
-.card-image-button {
-  border-radius: 5px;
-}
-
-.category-tag {
-  border-radius: 3px;
-  background: rgba(255, 255, 255, 0.94);
-  color: #475747;
-}
-
-.favorite-button {
-  border: 1px solid rgba(255, 255, 255, 0.7);
-  background: rgba(255, 255, 255, 0.95);
-}
-
-.card-title {
-  font-family: 'DM Sans', sans-serif;
-  font-weight: 500;
-  letter-spacing: -0.04em;
 }
